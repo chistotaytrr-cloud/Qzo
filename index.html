@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Последний Контроль</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        #app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+        .active { display: flex; }
+        .header {
+            font-size: 1.1em;
+            text-align: center;
+            padding: 8px 0;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .queue {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 12px 0;
+        }
+        .person {
+            width: 54px;
+            height: 54px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            border: 1px solid #555;
+        }
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 12px 0;
+        }
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tool-btn {
+            background: #444;
+            color: white;
+        }
+        .tool-btn:disabled {
+            background: #222;
+            color: #666;
+        }
+        .log {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 12px 0;
+            flex: 1;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .decisions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .decision-btn {
+            flex: 1;
+            min-width: 110px;
+            padding: 14px;
+            font-weight: bold;
+        }
+        .safe     { background: #2e7d32; color: white; }
+        .quarantine { background: #f9a825; color: black; }
+        .liquidation { background: #c62828; color: white; }
+        .lab      { background: #6a1b9a; color: white; }
+        .menu-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 10px 14px;
+            background: #444;
+            z-index: 10;
+        }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 12px;
+            background: #222;
+            border-radius: 8px;
+            padding: 12px;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 20;
+        }
+        .menu.active { display: flex; }
+        .uv-flash {
+            animation: flash 1.2s infinite;
+        }
+        @keyframes flash {
+            0%,100% { opacity: 1; }
+            50%     { opacity: 0.4; }
+        }
+        :root {
+            --bg: var(--tg-theme-bg-color, #0d0d0d);
+            --text: var(--tg-theme-text-color, #e0e0e0);
+            --btn: var(--tg-theme-button-color, #444);
+        }
+        body { background: var(--bg); color: var(--text); }
+        .tool-btn { background: var(--btn); }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <!-- Главный экран -->
+    <div id="main" class="screen active">
+        <div class="header">
+            День <b id="day">1</b>  RP: <b id="rp">0</b>  Заражение: <b id="inf">0</b>/7
+        </div>
+        <div class="queue" id="queue"></div>
+        <button id="next-person" class="tool-btn" style="align-self:center; padding:14px 28px; font-size:1.1em;">
+            Осмотреть следующего
+        </button>
+        <div style="margin-top:16px; text-align:center; font-size:0.9em;" id="daily"></div>
+        <button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('active')">Меню</button>
+        <div id="menu" class="menu">
+            <button onclick="show('profile')">Профиль</button>
+            <button onclick="show('settings')">Настройки</button>
+            <button onclick="resetGame()">Начать заново</button>
+        </div>
+    </div>
+
+    <!-- Осмотр -->
+    <div id="inspect" class="screen">
+        <div class="header">Человек №<span id="pid"></span></div>
+        <div id="desc" style="text-align:center; margin:12px 0; font-style:italic;"></div>
+        <div class="tools" id="tools"></div>
+        <div class="log" id="log"></div>
+        <div class="decisions">
+            <button class="decision-btn safe"     onclick="decide('SAFE')">SAFE</button>
+            <button class="decision-btn quarantine" onclick="decide('QUARANTINE')">КАРАНТИН</button>
+            <button class="decision-btn liquidation" onclick="decide('LIQUIDATION')">ЛИКВИДАЦИЯ</button>
+            <button class="decision-btn lab"      onclick="decide('LAB')" id="btn-lab" disabled>LAB</button>
+        </div>
+        <button onclick="show('main')" style="margin:12px auto; background:#555; color:white; padding:10px 20px;">
+            ← Назад (без решения)
+        </button>
+    </div>
+
+    <!-- Профиль -->
+    <div id="profile" class="screen">
+        <div class="header">Профиль</div>
+        <div style="padding:16px; text-align:center;">
+            <p>Лучший день: <b id="bestday">—</b></p>
+            <p>Точность: <b id="acc">—</b>%</p>
+            <p>Всего осмотрено: <b id="totalinsp">0</b></p>
+        </div>
+        <button onclick="show('main')">Назад</button>
+    </div>
+
+    <!-- Настройки -->
+    <div id="settings" class="screen">
+        <div class="header">Настройки</div>
+        <div style="padding:20px; text-align:center;">
+            <button onclick="resetGame()" style="background:#c62828; color:white; padding:16px; font-size:1.1em; margin:12px;">
+                Сбросить прогресс
+            </button>
+        </div>
+        <button onclick="show('main')">Назад</button>
+    </div>
+
+    <!-- Game Over -->
+    <div id="over" class="screen" style="justify-content:center; text-align:center;">
+        <div style="font-size:1.4em; color:#ff5252; margin-bottom:20px;">GAME OVER</div>
+        <div id="over-reason" style="margin:0 20px 30px; line-height:1.4;"></div>
+        <button onclick="resetGame()" style="background:#444; color:white; padding:16px 32px; font-size:1.1em;">
+            Начать заново
+        </button>
+    </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// Основные константы и состояние
+// ──────────────────────────────────────────────
+
+const MAX_DAYS = 26;
+const TOOLS = [
+    {n:'Flashlight',        t:'Фонарик',          c:'visual',       u:true},
+    {n:'Thermopulsometer',  t:'Термометр+пульс',  c:'temp',         u:false},
+    {n:'ReflexHammer',      t:'Молоточек',        c:'reflex',       u:false},
+    {n:'UVScanner',         t:'UV-сканер',        c:'uv',           u:false},
+    {n:'Stethoscope',       t:'Стетоскоп',        c:'breath',       u:false},
+    {n:'XRay',              t:'Рентген',          c:'internal',     u:false}
+    // можно добавить остальные позже
+];
+
+const SYMPTOMS = {
+    visual:  ['бледность', 'сыпь', 'укус', 'царапина', 'помутнение глаз'],
+    temp:    ['температура 39.1', 'температура 35.8', 'пульс 42', 'пульс 135'],
+    reflex:  ['рефлексы отсутствуют', 'гиперактивные рефлексы'],
+    uv:      ['свечение под UV'],
+    breath:  ['хрипы', 'бульканье', 'атональное дыхание'],
+    internal:['контрабанда в животе', 'внутренние кровоизлияния']
+};
+
+let state = {
+    day: 1,
+    rp: 0,
+    inf: 0,
+    budget: 1000,
+    tools: ['Flashlight'],
+    queue: [],
+    person: null,
+    found: [],
+    stats: {s:0, q:0, l:0, lab:0},
+    total: 0,
+    correct: 0,
+    bestDay: 0,
+    endless: false
+};
+
+let descriptions = [
+    "Мужчина средних лет, усталый вид, одежда грязная.",
+    "Женщина с ребёнком, нервничает, руки дрожат.",
+    "Молодой парень в капюшоне, избегает зрительного контакта.",
+    "Пожилой человек, кашляет, лицо покрыто потом.",
+    "Девушка с рюкзаком, выглядит здоровой, но очень бледная."
+];
+
+// ──────────────────────────────────────────────
+// localStorage
+// ──────────────────────────────────────────────
+
+function load() {
+    const s = localStorage.getItem('qz_lastcheck');
+    if (s) Object.assign(state, JSON.parse(s));
+    renderAll();
+}
+
+function save() {
+    localStorage.setItem('qz_lastcheck', JSON.stringify(state));
+}
+
+function resetGame() {
+    state = {
+        day:1, rp:0, inf:0, budget:1000, tools:['Flashlight'],
+        queue:[], person:null, found:[], stats:{s:0,q:0,l:0,lab:0},
+        total:0, correct:0, bestDay:0, endless:false
+    };
+    save();
+    startDay();
+    show('main');
+}
+
+// ──────────────────────────────────────────────
+// Логика дня и генерация
+// ──────────────────────────────────────────────
+
+function startDay() {
+    if (state.day > MAX_DAYS && !state.endless) {
+        document.getElementById('over-reason').innerHTML = 'Вы дошли до 26 дня!<br>Поздравляем — кампания пройдена.<br>Теперь доступен бесконечный режим.';
+        show('over');
+        return;
+    }
+
+    const cnt = Math.min(8 + state.day, 22);
+    state.queue = [];
+    for (let i = 1; i <= cnt; i++) {
+        const healthy = Math.random() < 0.6 - state.day*0.015;
+        const status = healthy ? 'healthy' : (Math.random() < 0.65 ? 'infected' : 'carrier');
+        const syms = [];
+        const cats = Object.keys(SYMPTOMS);
+        const ns = 3 + Math.floor(Math.random()*5);
+        for (let j = 0; j < ns; j++) {
+            const cat = cats[Math.floor(Math.random()*cats.length)];
+            const sym = SYMPTOMS[cat][Math.floor(Math.random()*SYMPTOMS[cat].length)];
+            syms.push({cat, sym});
+        }
+        const contra = Math.random() < 0.08 + state.day*0.008;
+        state.queue.push({id:i, status, syms, contra});
+    }
+    renderQueue();
+    document.getElementById('day').textContent = state.day;
+    renderAll();
+}
+
+function renderQueue() {
+    const q = document.getElementById('queue');
+    q.innerHTML = '';
+    state.queue.slice(0,6).forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'person';
+        div.textContent = p.id;
+        q.appendChild(div);
+    });
+}
+
+// ──────────────────────────────────────────────
+// Осмотр
+// ──────────────────────────────────────────────
+
+document.getElementById('next-person').onclick = () => {
+    if (!state.queue.length) return;
+    state.person = state.queue.shift();
+    state.found = [];
+    document.getElementById('pid').textContent = state.person.id;
+    document.getElementById('desc').textContent = descriptions[Math.floor(Math.random()*descriptions.length)];
+    renderTools();
+    document.getElementById('log').innerHTML = '';
+    show('inspect');
+    renderQueue();
+};
+
+function renderTools() {
+    const t = document.getElementById('tools');
+    t.innerHTML = '';
+    TOOLS.forEach(tool => {
+        if (state.tools.includes(tool.n)) {
+            const b = document.createElement('button');
+            b.className = 'tool-btn';
+            b.textContent = tool.t;
+            b.onclick = () => inspect(tool);
+            t.appendChild(b);
+        }
+    });
+}
+
+function inspect(tool) {
+    const log = document.getElementById('log');
+    const p = state.person;
+    let foundSomething = false;
+
+    p.syms.forEach(s => {
+        if (s.cat === tool.c && !state.found.includes(s.sym)) {
+            state.found.push(s.sym);
+            const li = document.createElement('div');
+            li.textContent = `→ ${s.sym}`;
+            if (tool.n === 'UVScanner') li.className = 'uv-flash';
+            log.appendChild(li);
+            foundSomething = true;
+        }
+    });
+
+    if (tool.c === 'internal' && p.contra) {
+        const li = document.createElement('div');
+        li.textContent = '→ контрабанда обнаружена!';
+        log.appendChild(li);
+        state.found.push('contra');
+        foundSomething = true;
+    }
+
+    if (!foundSomething) {
+        log.innerHTML += '<div>→ ничего подозрительного</div>';
+    }
+
+    log.scrollTop = log.scrollHeight;
+}
+
+// ──────────────────────────────────────────────
+// Решение
+// ──────────────────────────────────────────────
+
+function decide(choice) {
+    const p = state.person;
+    let score = 0;
+    let infDelta = 0;
+
+    const isInfected = p.status === 'infected' || (p.status === 'carrier' && Math.random() < 0.4);
+    const contraFound = state.found.includes('contra');
+
+    if (choice === 'SAFE') {
+        if (p.status === 'healthy' && !p.contra) score = 100;
+        else infDelta = isInfected ? 2 : 1;
+    }
+    else if (choice === 'QUARANTINE') {
+        if (p.status === 'carrier') score = 120;
+        else if (p.status === 'healthy') infDelta = 0.5;
+    }
+    else if (choice === 'LIQUIDATION') {
+        if (p.status === 'infected') score = 150;
+        else infDelta = p.status === 'healthy' ? 0.7 : 0.3;
+    }
+    else if (choice === 'LAB') {
+        score = 250;
+        if (p.status === 'healthy') infDelta = 0.8;
+    }
+
+    // бонус за тщательность
+    const allFound = p.syms.every(s => state.found.includes(s.sym)) || (p.contra && contraFound);
+    if (allFound) score += 60;
+
+    if (score > 0) state.correct++;
+    state.total++;
+    state.rp += score;
+    state.inf += infDelta;
+    state.stats[choice === 'SAFE' ? 's' : choice === 'QUARANTINE' ? 'q' : choice === 'LIQUIDATION' ? 'l' : 'lab']++;
+
+    if (state.inf >= 7) {
+        document.getElementById('over-reason').innerHTML = 'Инфекция вышла из-под контроля.<br>Заражение достигло критического уровня.';
+        show('over');
+        return;
+    }
+
+    if (state.queue.length === 0) {
+        // конец дня — простая проверка
+        if (state.stats.s < 3 && state.day > 5) {
+            state.inf += 1.5;
+        }
+        state.day++;
+        if (state.day > state.bestDay) state.bestDay = state.day - 1;
+        state.stats = {s:0,q:0,l:0,lab:0};
+        startDay();
+    }
+
+    show('main');
+    save();
+    renderAll();
+}
+
+// ──────────────────────────────────────────────
+// UI
+// ──────────────────────────────────────────────
+
+function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'profile') {
+        document.getElementById('bestday').textContent = state.bestDay || '—';
+        document.getElementById('acc').textContent = state.total ? Math.round(state.correct / state.total * 100) : '—';
+        document.getElementById('totalinsp').textContent = state.total;
+    }
+}
+
+function renderAll() {
+    document.getElementById('rp').textContent = state.rp;
+    document.getElementById('inf').textContent = Math.floor(state.inf);
+    document.getElementById('daily').innerHTML = `
+        Safe: ${state.stats.s} 
+        Quar: ${state.stats.q} 
+        Liq: ${state.stats.l} 
+        Lab: ${state.stats.lab}
+    `;
+    document.getElementById('btn-lab').disabled = !state.tools.includes('XRay'); // пример условия
+}
+
+// ──────────────────────────────────────────────
+// Старт
+// ──────────────────────────────────────────────
+
+load();
+startDay();
+</script>
+</body>
+</html>
