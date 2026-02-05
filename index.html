@@ -9,136 +9,54 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0d0d0d;
-            color: #e0e0e0;
+            background: #0a0a0a center/cover fixed;
+            color: #e8e8e8;
             height: 100vh;
             overflow: hidden;
             touch-action: manipulation;
         }
-        #app {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .screen {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            padding: 12px;
-            box-sizing: border-box;
-        }
+        #app { height: 100%; display: flex; flex-direction: column; position: relative; }
+        .screen { display: none; flex-direction: column; height: 100%; padding: 16px; box-sizing: border-box; backdrop-filter: blur(8px); background: rgba(10,10,10,0.75); }
         .active { display: flex; }
-        .header {
-            font-size: 1.1em;
-            text-align: center;
-            padding: 8px 0;
-            background: rgba(0,0,0,0.4);
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-        .queue {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin: 12px 0;
-        }
-        .person {
-            width: 54px;
-            height: 54px;
-            background: #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            border: 1px solid #555;
-        }
-        .tools {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin: 12px 0;
-        }
-        button {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95em;
-            cursor: pointer;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .tool-btn {
-            background: #444;
-            color: white;
-        }
-        .tool-btn:disabled {
-            background: #222;
-            color: #666;
-        }
-        .log {
-            background: #1a1a1a;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 12px 0;
-            flex: 1;
-            overflow-y: auto;
-            font-size: 0.9em;
-            line-height: 1.4;
-        }
-        .decisions {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .decision-btn {
-            flex: 1;
-            min-width: 110px;
-            padding: 14px;
-            font-weight: bold;
-        }
-        .safe     { background: #2e7d32; color: white; }
-        .quarantine { background: #f9a825; color: black; }
-        .liquidation { background: #c62828; color: white; }
-        .lab      { background: #6a1b9a; color: white; }
-        .menu-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 10px 14px;
-            background: #444;
-            z-index: 10;
-        }
-        .menu {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 12px;
-            background: #222;
-            border-radius: 8px;
-            padding: 12px;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 20;
-        }
+        .header { font-size: 1.3em; text-align: center; padding: 12px; background: linear-gradient(45deg, #003300, #006600); border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(0,200,0,0.4); }
+        .subheader { font-size: 1em; text-align: center; padding: 8px; background: rgba(40,40,40,0.8); border-radius: 8px; margin: 8px 0; }
+        .queue { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+        .person { width: 60px; height: 60px; background: linear-gradient(135deg, #444, #666); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #777; box-shadow: 0 4px 8px rgba(0,0,0,0.6); transition: transform 0.2s; }
+        .person:hover { transform: scale(1.1); }
+        .portrait { width: 180px; height: 240px; border-radius: 12px; object-fit: cover; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.9); border: 3px solid #444; }
+        .tools { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 16px 0; }
+        button { padding: 12px 18px; border: none; border-radius: 10px; font-size: 0.98em; cursor: pointer; touch-action: manipulation; transition: all 0.18s; display: flex; align-items: center; gap: 8px; }
+        button:active { transform: scale(0.96); }
+        .tool-btn { background: linear-gradient(145deg, #555, #777); color: white; min-width: 110px; justify-content: center; }
+        .tool-btn img { width: 22px; height: 22px; filter: brightness(1.1); }
+        .tool-btn:disabled { background: #333; color: #555; }
+        .log { background: rgba(15,15,15,0.92); border-radius: 12px; padding: 14px; margin: 16px 0; flex: 1; overflow-y: auto; font-size: 0.94em; line-height: 1.45; border: 1px solid #444; }
+        .symptom { padding: 8px 14px; margin: 6px 0; border-radius: 8px; font-weight: bold; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+        .symptom.green  { background: linear-gradient(145deg, #1b5e20, #388e3c); color: white; }
+        .symptom.yellow { background: linear-gradient(145deg, #f57f17, #ffb300); color: black; }
+        .symptom.red    { background: linear-gradient(145deg, #b71c1c, #d32f2f); color: white; animation: pulse 1.6s infinite; }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        .uv-glow { animation: uvflash 1.2s infinite alternate; filter: drop-shadow(0 0 12px #7e57c2); }
+        @keyframes uvflash { 0% { filter: hue-rotate(0deg) drop-shadow(0 0 6px #7e57c2); } 100% { filter: hue-rotate(200deg) drop-shadow(0 0 18px #7e57c2); } }
+        .blood-drip::after { content:''; position:absolute; bottom:-12px; left:50%; width:5px; height:0; background:#8b0000; animation:drip 2.5s infinite; transform:translateX(-50%); }
+        @keyframes drip { 0%{height:0;opacity:1} 100%{height:30px;opacity:0} }
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+        .decisions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+        .decision-btn { flex: 1; min-width: 115px; padding: 16px; font-weight: bold; font-size: 1.05em; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
+        .safe { background: linear-gradient(145deg, #2e7d32, #4caf50); color: white; }
+        .quarantine { background: linear-gradient(145deg, #f57f17, #ffb300); color: black; }
+        .liquidation { background: linear-gradient(145deg, #b71c1c, #d32f2f); color: white; }
+        .lab { background: linear-gradient(145deg, #6a1b9a, #9c27b0); color: white; }
+        .menu-btn { position: absolute; top: 16px; right: 16px; padding: 12px 16px; background: rgba(0,0,0,0.75); z-index: 10; }
+        .menu { display: none; position: absolute; top: 64px; right: 16px; background: rgba(20,20,20,0.95); border-radius: 12px; padding: 16px; flex-direction: column; gap: 12px; z-index: 11; border: 1px solid #555; min-width: 220px; }
         .menu.active { display: flex; }
-        .uv-flash {
-            animation: flash 1.2s infinite;
-        }
-        @keyframes flash {
-            0%,100% { opacity: 1; }
-            50%     { opacity: 0.4; }
-        }
-        :root {
-            --bg: var(--tg-theme-bg-color, #0d0d0d);
-            --text: var(--tg-theme-text-color, #e0e0e0);
-            --btn: var(--tg-theme-button-color, #444);
-        }
-        body { background: var(--bg); color: var(--text); }
+        .upgrade-list, .base-list { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 16px 0; }
+        .upgrade-item, .base-item { background: rgba(40,40,40,0.85); padding: 12px; border-radius: 10px; text-align: center; min-width: 120px; border: 1px solid #555; }
+        .progress-bar { width: 100%; height: 10px; background: #222; border-radius: 5px; overflow: hidden; margin: 12px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4caf50, #ffeb3b, #f44336); transition: width 0.6s; }
+        :root { --bg: var(--tg-theme-bg-color, #0a0a0a); --text: var(--tg-theme-text-color, #e8e8e8); --btn: var(--tg-theme-button-color, #555); }
+        body { background-color: var(--bg); color: var(--text); }
         .tool-btn { background: var(--btn); }
     </style>
 </head>
@@ -149,34 +67,37 @@
     <!-- Главный экран -->
     <div id="main" class="screen active">
         <div class="header">
-            День <b id="day">1</b>  RP: <b id="rp">0</b>  Заражение: <b id="inf">0</b>/7
+            День <b id="day">1</b> | RP <b id="rp">0</b> | Заражение <b id="inf">0.0</b>/7 | Бюджет $<b id="budget">1000</b>
         </div>
+        <div class="subheader" id="daily-stats"></div>
         <div class="queue" id="queue"></div>
-        <button id="next-person" class="tool-btn" style="align-self:center; padding:14px 28px; font-size:1.1em;">
-            Осмотреть следующего
+        <button id="next-person" class="tool-btn" style="font-size:1.15em; padding:16px 32px; margin:0 auto;">
+            Следующий
         </button>
-        <div style="margin-top:16px; text-align:center; font-size:0.9em;" id="daily"></div>
-        <button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('active')">Меню</button>
+        <div class="progress-bar"><div class="progress-fill" id="inf-bar" style="width:0%"></div></div>
+        <button class="menu-btn" onclick="document.getElementById('menu').classList.toggle('active')">☰</button>
         <div id="menu" class="menu">
             <button onclick="show('profile')">Профиль</button>
-            <button onclick="show('settings')">Настройки</button>
-            <button onclick="resetGame()">Начать заново</button>
+            <button onclick="show('upgrades')">Прокачка</button>
+            <button onclick="show('base')">База</button>
+            <button onclick="resetGame()">Сброс</button>
         </div>
     </div>
 
     <!-- Осмотр -->
     <div id="inspect" class="screen">
-        <div class="header">Человек №<span id="pid"></span></div>
-        <div id="desc" style="text-align:center; margin:12px 0; font-style:italic;"></div>
+        <div class="header">Осмотр №<span id="pid"></span></div>
+        <img id="portrait" class="portrait" src="" alt="Человек">
+        <div id="desc" class="subheader"></div>
         <div class="tools" id="tools"></div>
         <div class="log" id="log"></div>
         <div class="decisions">
             <button class="decision-btn safe"     onclick="decide('SAFE')">SAFE</button>
             <button class="decision-btn quarantine" onclick="decide('QUARANTINE')">КАРАНТИН</button>
             <button class="decision-btn liquidation" onclick="decide('LIQUIDATION')">ЛИКВИДАЦИЯ</button>
-            <button class="decision-btn lab"      onclick="decide('LAB')" id="btn-lab" disabled>LAB</button>
+            <button class="decision-btn lab"      id="btn-lab" onclick="decide('LAB')">LAB</button>
         </div>
-        <button onclick="show('main')" style="margin:12px auto; background:#555; color:white; padding:10px 20px;">
+        <button onclick="show('main')" style="margin:16px auto; background:#444; color:white; padding:12px 24px;">
             ← Назад (без решения)
         </button>
     </div>
@@ -184,104 +105,182 @@
     <!-- Профиль -->
     <div id="profile" class="screen">
         <div class="header">Профиль</div>
-        <div style="padding:16px; text-align:center;">
+        <div style="flex:1; padding:20px; text-align:center;">
             <p>Лучший день: <b id="bestday">—</b></p>
             <p>Точность: <b id="acc">—</b>%</p>
-            <p>Всего осмотрено: <b id="totalinsp">0</b></p>
+            <p>Осмотрено: <b id="total">0</b> | Успешно: <b id="correct">0</b></p>
+            <p>Провалы квот: <b id="failed">0</b>/5</p>
+            <p>Исследовано симптомов: <b id="researched">0</b></p>
         </div>
         <button onclick="show('main')">Назад</button>
     </div>
 
-    <!-- Настройки -->
-    <div id="settings" class="screen">
-        <div class="header">Настройки</div>
-        <div style="padding:20px; text-align:center;">
-            <button onclick="resetGame()" style="background:#c62828; color:white; padding:16px; font-size:1.1em; margin:12px;">
-                Сбросить прогресс
+    <!-- Прокачка инструментов -->
+    <div id="upgrades" class="screen">
+        <div class="header">Прокачка инструментов</div>
+        <div class="upgrade-list" id="upgrade-list"></div>
+        <button onclick="show('main')" style="margin-top:20px;">Назад</button>
+    </div>
+
+    <!-- База -->
+    <div id="base" class="screen">
+        <div class="header">База — Уровень <span id="zone-level">0</span></div>
+        <div class="base-list" id="base-list"></div>
+        <button id="zone-upgrade-btn" onclick="upgradeZone()" style="margin:20px auto; padding:14px 28px; font-size:1.1em;">
+            Повысить уровень зоны
+        </button>
+        <button onclick="show('main')">Назад</button>
+    </div>
+
+    <!-- Game Over / Victory -->
+    <div id="over" class="screen">
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+            <div id="over-title" style="font-size:2.2em; margin-bottom:24px;">GAME OVER</div>
+            <div id="over-reason" style="font-size:1.15em; line-height:1.5; background:rgba(0,0,0,0.7); padding:20px; border-radius:12px; width:90%; max-width:400px;"></div>
+            <button onclick="resetGame()" style="margin-top:30px; padding:18px 40px; font-size:1.3em; background:linear-gradient(145deg,#388e3c,#81c784); color:white;">
+                Начать заново
+            </button>
+            <button id="endless-btn" onclick="startEndless()" style="margin-top:16px; padding:18px 40px; font-size:1.3em; background:linear-gradient(145deg,#7b1fa2,#ab47bc); color:white; display:none;">
+                ♾️ Бесконечный режим
             </button>
         </div>
-        <button onclick="show('main')">Назад</button>
-    </div>
-
-    <!-- Game Over -->
-    <div id="over" class="screen" style="justify-content:center; text-align:center;">
-        <div style="font-size:1.4em; color:#ff5252; margin-bottom:20px;">GAME OVER</div>
-        <div id="over-reason" style="margin:0 20px 30px; line-height:1.4;"></div>
-        <button onclick="resetGame()" style="background:#444; color:white; padding:16px 32px; font-size:1.1em;">
-            Начать заново
-        </button>
     </div>
 
 </div>
 
 <script>
 // ──────────────────────────────────────────────
-// Основные константы и состояние
+// Telegram init
 // ──────────────────────────────────────────────
+const tg = window.Telegram?.WebApp;
+if (tg) {
+    tg.ready();
+    tg.expand();
+    document.documentElement.style.setProperty('--bg', tg.themeParams.bg_color || '#0a0a0a');
+    document.documentElement.style.setProperty('--text', tg.themeParams.text_color || '#e8e8e8');
+    document.documentElement.style.setProperty('--btn', tg.themeParams.button_color || '#555');
+}
 
+// ──────────────────────────────────────────────
+// Константы
+// ──────────────────────────────────────────────
 const MAX_DAYS = 26;
+const PORTRAITS = [
+    'https://i.ytimg.com/vi/ieSUuY8_iLE/maxresdefault.jpg',
+    'https://thumbs.dreamstime.com/b/illustration-hooded-character-wearing-metallic-gas-mask-burned-forest-environment-rugged-clothing-glowing-embers-428627660.jpg',
+    'https://i.shgcdn.com/c7050974-a384-4dbf-ae20-3a4c8f43a96b/',
+    'https://foreignpolicy.com/wp-content/uploads/2015/08/gettyimages-477982472_zombies.jpg?resize=1200,900',
+    'https://i.redd.it/kqi5mt28aywd1.jpeg',
+    'https://cdn.arstechnica.net/wp-content/uploads/2013/06/joel-ellie-close-up-1152x648.png',
+    'https://thumbs.dreamstime.com/b/dead-guy-horrible-scary-halloween-zombie-makeup-face-makes-finger-gun-gesture-camera-expresses-choice-standing-covered-406938409.jpg',
+    'https://i.shgcdn.com/53dadcee-41e3-4503-bf6d-9f10548d5627/',
+    'https://c8.alamy.com/comp/2YDWX15/sinister-or-scaring-child-pretends-to-be-a-zombie-shot-in-the-head-as-halloween-costume-spooky-kid-dressed-as-a-halloween-demon-or-dead-spectre-2YDWX15.jpg',
+    'https://d1joui61864gj3.cloudfront.net/374203/md_h2yxxl_9d3cc2dbf2bbcadb4fc59803667c24e0b39225a8.jpg',
+    'https://thumbs.dreamstime.com/b/lone-zombie-wanders-deserted-crumbling-city-embodying-desolate-post-apocalyptic-world-zombie-walking-ruined-374738276.jpg'
+];
+
+const TOOL_ICONS = {
+    Flashlight: 'https://www.clipartmax.com/png/middle/137-1376529_flashlight-vector-torch-light-icon.png',
+    Thermopulsometer: 'https://img.freepik.com/free-vector/flat-thermometer-types-illustration_23-2148617054.jpg',
+    ReflexHammer: 'https://www.shutterstock.com/shutterstock/photos/2403671447/display_1500/stock-vector-reflex-hammer-icon-medical-instrument-used-by-practitioners-to-test-deep-tendon-reflexes-of-hand-2403671447.jpg',
+    Stethoscope: 'https://i.fbcd.co/products/original/2854-8dd6b142aed770398da02e5d7b4fc0c1fba225c99eaabb73c235d3147030b1a8.jpg',
+    UVScanner: 'https://thumbs.dreamstime.com/b/uv-radiation-icon-set-black-circle-ultraviolet-light-symbol-uv-radiation-icon-set-black-circle-ultraviolet-light-symbol-397822164.jpg',
+    XRay: 'https://media.istockphoto.com/id/1364222944/vector/mobile-c-arm-x-ray-machine-concept-vector-icon-design-medical-and-healthcare-scene-symbol.jpg',
+    SyringeAnalyzer: 'https://thumbs.dreamstime.com/b/syringes-magnifying-glass-tubes-blood-test-analysis-icons-vector-illustration-173931463.jpg',
+    Matioscope: 'https://thumbs.dreamstime.com/b/medical-devices-line-black-icons-set-mri-anesthesia-machine-syringe-pump-dropper-defibrillator-signs-web-page-mobile-app-165778764.jpg',
+    SymptomScanner: 'https://thumbs.dreamstime.com/b/medical-device-health-monitoring-equipment-icon-vector-design-generative-ai-modern-possibly-blood-pressure-monitor-symbolizing-417446879.jpg'
+};
+
 const TOOLS = [
-    {n:'Flashlight',        t:'Фонарик',          c:'visual',       u:true},
-    {n:'Thermopulsometer',  t:'Термометр+пульс',  c:'temp',         u:false},
-    {n:'ReflexHammer',      t:'Молоточек',        c:'reflex',       u:false},
-    {n:'UVScanner',         t:'UV-сканер',        c:'uv',           u:false},
-    {n:'Stethoscope',       t:'Стетоскоп',        c:'breath',       u:false},
-    {n:'XRay',              t:'Рентген',          c:'internal',     u:false}
-    // можно добавить остальные позже
+    {n:'Flashlight',        t:'Фонарик',          c:'visual',       cost:0,   u:true,  icon:TOOL_ICONS.Flashlight,        upgrades:[]},
+    {n:'Thermopulsometer',  t:'Термопульс',       c:'temp',         cost:400, u:false, icon:TOOL_ICONS.Thermopulsometer,  upgrades:[{name:'Color',cost:80,bought:false}]},
+    {n:'ReflexHammer',      t:'Рефлексы',         c:'reflex',       cost:600, u:false, icon:TOOL_ICONS.ReflexHammer,      upgrades:[{name:'Auto',cost:100,bought:false}]},
+    {n:'Stethoscope',       t:'Стетоскоп',        c:'breath',       cost:800, u:false, icon:TOOL_ICONS.Stethoscope,       upgrades:[]},
+    {n:'UVScanner',         t:'UV-сканер',        c:'uv',           cost:1200,u:false, icon:TOOL_ICONS.UVScanner,         upgrades:[{name:'Vapor',cost:150,bought:false}]},
+    {n:'XRay',              t:'Рентген',          c:'internal',     cost:1800,u:false, icon:TOOL_ICONS.XRay,              upgrades:[]},
+    {n:'SyringeAnalyzer',   t:'Анализ крови',     c:'blood',        cost:2800,u:false, icon:TOOL_ICONS.SyringeAnalyzer,   upgrades:[]},
+    {n:'Matioscope',        t:'Матиоскоп',        c:'eyes',         cost:1500,u:false, icon:TOOL_ICONS.Matioscope,        upgrades:[]},
+    {n:'SymptomScanner',    t:'Сканер симптомов', c:'hint',         cost:2200,u:false, icon:TOOL_ICONS.SymptomScanner,    upgrades:[]}
 ];
 
 const SYMPTOMS = {
-    visual:  ['бледность', 'сыпь', 'укус', 'царапина', 'помутнение глаз'],
-    temp:    ['температура 39.1', 'температура 35.8', 'пульс 42', 'пульс 135'],
-    reflex:  ['рефлексы отсутствуют', 'гиперактивные рефлексы'],
-    uv:      ['свечение под UV'],
-    breath:  ['хрипы', 'бульканье', 'атональное дыхание'],
-    internal:['контрабанда в животе', 'внутренние кровоизлияния']
+    visual:  [{sym:'бледность',color:'yellow'},{sym:'укус',color:'red'},{sym:'сыпь',color:'yellow'},{sym:'царапина',color:'yellow'},{sym:'некроз',color:'red'}],
+    temp:    [{sym:'39.4°C',color:'red'},{sym:'пульс 145',color:'red'},{sym:'35.2°C',color:'yellow'}],
+    reflex:  [{sym:'отсутствуют',color:'red'},{sym:'гиперактивные',color:'yellow'}],
+    breath:  [{sym:'хрипы',color:'yellow'},{sym:'бульканье',color:'red'},{sym:'атональное',color:'red'}],
+    uv:      [{sym:'свечение укуса',color:'red'},{sym:'скрытые испарения',color:'yellow'}],
+    internal:[{sym:'внутр. кровотечение',color:'red'},{sym:'контрабанда',color:'yellow'}],
+    blood:   [{sym:'заражённая кровь',color:'red'}],
+    eyes:    [{sym:'паразиты в глазах',color:'red',unknown:true},{sym:'помутнение',color:'yellow'},{sym:'кровавые глаза',color:'red'}],
+    docs:    [{sym:'фальшивый паспорт',color:'yellow'},{sym:'фото не совпадает',color:'yellow'}]
 };
 
+const DESCRIPTIONS = [
+    "Усталый мужчина в рваной куртке, смотрит в пол.",
+    "Женщина средних лет, нервно сжимает сумку.",
+    "Молодой парень в капюшоне, избегает взгляда.",
+    "Пожилая женщина, сильно кашляет.",
+    "Девушка с рюкзаком, бледная и дрожит.",
+    "Мужчина с бородой, одежда в крови.",
+    "Ребёнок держится за руку взрослого, глаза красные."
+];
+
+const BASE_UPGRADES = [
+    {key:'tents',     name:'Палатки',     desc:'+ квота SAFE',     max:3, costs:[120,250,500],   effect:()=>{/* +safe quota */}},
+    {key:'security',  name:'Охрана',      desc:'- распространение инфекции', max:3, costs:[180,350,700],   effect:()=>{/* inf *0.75 */}},
+    {key:'canteen',   name:'Столовая',    desc:'+ бюджет/день',    max:2, costs:[220,450],      effect:()=>{state.budget += 60;}},
+    {key:'generator', name:'Генератор',   desc:'- ежедневные расходы', max:4, costs:[300,600,1200,2000], effect:()=>{/* daily cost -30 */}}
+];
+
+// ──────────────────────────────────────────────
+// Состояние
+// ──────────────────────────────────────────────
 let state = {
     day: 1,
     rp: 0,
     inf: 0,
     budget: 1000,
+    failed: 0,
     tools: ['Flashlight'],
+    toolUpgrades: {},       // {ReflexHammer: {Auto:true}}
+    baseUpgrades: {},       // {tents:2, security:1}
+    zoneLevel: 0,
     queue: [],
     person: null,
     found: [],
-    stats: {s:0, q:0, l:0, lab:0},
+    researched: [],         // разблокированные unknown симптомы
+    stats: {s:0,q:0,l:0,lab:0},
     total: 0,
     correct: 0,
     bestDay: 0,
-    endless: false
+    endless: false,
+    evac: false
 };
 
-let descriptions = [
-    "Мужчина средних лет, усталый вид, одежда грязная.",
-    "Женщина с ребёнком, нервничает, руки дрожат.",
-    "Молодой парень в капюшоне, избегает зрительного контакта.",
-    "Пожилой человек, кашляет, лицо покрыто потом.",
-    "Девушка с рюкзаком, выглядит здоровой, но очень бледная."
-];
+let seed = 1;
+function seededRandom() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+}
+function setSeed(d) { seed = (d + 1) * 12345; }
 
 // ──────────────────────────────────────────────
 // localStorage
 // ──────────────────────────────────────────────
-
 function load() {
-    const s = localStorage.getItem('qz_lastcheck');
+    const s = localStorage.getItem('lastcontrol_full');
     if (s) Object.assign(state, JSON.parse(s));
     renderAll();
 }
-
 function save() {
-    localStorage.setItem('qz_lastcheck', JSON.stringify(state));
+    localStorage.setItem('lastcontrol_full', JSON.stringify(state));
 }
-
 function resetGame() {
     state = {
-        day:1, rp:0, inf:0, budget:1000, tools:['Flashlight'],
-        queue:[], person:null, found:[], stats:{s:0,q:0,l:0,lab:0},
-        total:0, correct:0, bestDay:0, endless:false
+        day:1, rp:0, inf:0, budget:1000, failed:0, tools:['Flashlight'],
+        toolUpgrades:{}, baseUpgrades:{}, zoneLevel:0,
+        queue:[], person:null, found:[], researched:[],
+        stats:{s:0,q:0,l:0,lab:0}, total:0, correct:0, bestDay:0, endless:false, evac:false
     };
     save();
     startDay();
@@ -289,41 +288,68 @@ function resetGame() {
 }
 
 // ──────────────────────────────────────────────
-// Логика дня и генерация
+// Генерация дня
 // ──────────────────────────────────────────────
-
 function startDay() {
     if (state.day > MAX_DAYS && !state.endless) {
-        document.getElementById('over-reason').innerHTML = 'Вы дошли до 26 дня!<br>Поздравляем — кампания пройдена.<br>Теперь доступен бесконечный режим.';
+        document.getElementById('over-title').textContent = 'ПОБЕДА!';
+        document.getElementById('over-reason').innerHTML = 'Вы защитили зону 26 дней!<br>Разблокирован бесконечный режим.';
+        document.getElementById('endless-btn').style.display = 'block';
         show('over');
         return;
     }
 
-    const cnt = Math.min(8 + state.day, 22);
+    setSeed(state.day);
+    state.evac = seededRandom() < 0.08 + (state.endless ? 0.05 : 0);
+
+    const baseCnt = 10 + Math.floor(seededRandom() * 16);
+    const cnt = state.evac ? Math.floor(baseCnt * 1.6) : baseCnt;
+
     state.queue = [];
     for (let i = 1; i <= cnt; i++) {
-        const healthy = Math.random() < 0.6 - state.day*0.015;
-        const status = healthy ? 'healthy' : (Math.random() < 0.65 ? 'infected' : 'carrier');
+        const healthyProb = 0.68 - state.day * 0.018 - (state.zoneLevel * 0.01) + (state.endless ? -0.12 : 0);
+        const status = seededRandom() < healthyProb ? 'healthy' :
+                       seededRandom() < 0.55 ? 'carrier' : 'infected';
         const syms = [];
         const cats = Object.keys(SYMPTOMS);
-        const ns = 3 + Math.floor(Math.random()*5);
+        const ns = 3 + Math.floor(seededRandom() * 6);
         for (let j = 0; j < ns; j++) {
-            const cat = cats[Math.floor(Math.random()*cats.length)];
-            const sym = SYMPTOMS[cat][Math.floor(Math.random()*SYMPTOMS[cat].length)];
-            syms.push({cat, sym});
+            const cat = cats[Math.floor(seededRandom() * cats.length)];
+            let symObj = SYMPTOMS[cat][Math.floor(seededRandom() * SYMPTOMS[cat].length)];
+            if (symObj.unknown && !state.researched.includes(symObj.sym)) {
+                symObj = {...symObj, hidden: true};
+            }
+            syms.push(symObj);
         }
-        const contra = Math.random() < 0.08 + state.day*0.008;
+        const contra = seededRandom() < 0.18 + state.day * 0.008;
         state.queue.push({id:i, status, syms, contra});
     }
+
+    state.stats = {s:0,q:0,l:0,lab:0};
     renderQueue();
-    document.getElementById('day').textContent = state.day;
     renderAll();
+    updateBackground();
 }
 
+function updateBackground() {
+    const lvl = Math.min(Math.floor(state.day / 7), 4);
+    const bgs = [
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+        'https://images.unsplash.com/photo-1540979388789-7cee28a1cdc9',
+        'https://images.unsplash.com/photo-1603733265789-4d049460a6f3',
+        'https://images.unsplash.com/photo-1563299796-17596ed6b017',
+        'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5'
+    ];
+    document.body.style.backgroundImage = `url(${bgs[lvl]})`;
+}
+
+// ──────────────────────────────────────────────
+// UI рендер
+// ──────────────────────────────────────────────
 function renderQueue() {
     const q = document.getElementById('queue');
     q.innerHTML = '';
-    state.queue.slice(0,6).forEach(p => {
+    state.queue.slice(0,7).forEach(p => {
         const div = document.createElement('div');
         div.className = 'person';
         div.textContent = p.id;
@@ -331,20 +357,39 @@ function renderQueue() {
     });
 }
 
+function renderAll() {
+    document.getElementById('day').textContent = state.day + (state.evac ? ' (эвакуация)' : '');
+    document.getElementById('rp').textContent = state.rp;
+    document.getElementById('inf').textContent = state.inf.toFixed(1);
+    document.getElementById('budget').textContent = state.budget;
+    document.getElementById('inf-bar').style.width = Math.min(state.inf / 7 * 100, 100) + '%';
+    document.getElementById('daily-stats').innerHTML = `SAFE: ${state.stats.s} | КАР: ${state.stats.q} | ЛИК: ${state.stats.l} | LAB: ${state.stats.lab}`;
+}
+
+function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'profile') renderProfile();
+    if (id === 'upgrades') renderUpgrades();
+    if (id === 'base') renderBase();
+}
+
 // ──────────────────────────────────────────────
 // Осмотр
 // ──────────────────────────────────────────────
-
 document.getElementById('next-person').onclick = () => {
     if (!state.queue.length) return;
     state.person = state.queue.shift();
     state.found = [];
     document.getElementById('pid').textContent = state.person.id;
-    document.getElementById('desc').textContent = descriptions[Math.floor(Math.random()*descriptions.length)];
-    renderTools();
+    document.getElementById('desc').textContent = DESCRIPTIONS[Math.floor(Math.random()*DESCRIPTIONS.length)];
+    document.getElementById('portrait').src = PORTRAITS[Math.floor(Math.random()*PORTRAITS.length)];
     document.getElementById('log').innerHTML = '';
+    renderTools();
+    document.getElementById('btn-lab').disabled = !state.tools.includes('SyringeAnalyzer');
     show('inspect');
     renderQueue();
+    if (tg) tg.HapticFeedback.impactOccurred('medium');
 };
 
 function renderTools() {
@@ -352,41 +397,80 @@ function renderTools() {
     t.innerHTML = '';
     TOOLS.forEach(tool => {
         if (state.tools.includes(tool.n)) {
-            const b = document.createElement('button');
-            b.className = 'tool-btn';
-            b.textContent = tool.t;
-            b.onclick = () => inspect(tool);
-            t.appendChild(b);
+            const btn = document.createElement('button');
+            btn.className = 'tool-btn';
+            btn.innerHTML = `<img src="${tool.icon}" onerror="this.style.display='none'"> ${tool.t}`;
+            btn.onclick = () => inspect(tool);
+            t.appendChild(btn);
         }
     });
 }
 
 function inspect(tool) {
+    if (tg) tg.HapticFeedback.impactOccurred('light');
     const log = document.getElementById('log');
     const p = state.person;
-    let foundSomething = false;
+    let foundNew = false;
 
+    // Симптомы по категории
     p.syms.forEach(s => {
-        if (s.cat === tool.c && !state.found.includes(s.sym)) {
+        if ((s.cat === tool.c || tool.c === 'hint') && !state.found.includes(s.sym)) {
+            if (s.hidden) return; // unknown пока скрыт
             state.found.push(s.sym);
-            const li = document.createElement('div');
-            li.textContent = `→ ${s.sym}`;
-            if (tool.n === 'UVScanner') li.className = 'uv-flash';
-            log.appendChild(li);
-            foundSomething = true;
+            const div = document.createElement('div');
+            div.className = `symptom ${s.color}${s.color==='red'?' blood-drip':''}`;
+            div.textContent = `🔍 ${s.sym}`;
+            if (tool.n === 'UVScanner') div.classList.add('uv-glow');
+            log.appendChild(div);
+            foundNew = true;
         }
     });
 
-    if (tool.c === 'internal' && p.contra) {
-        const li = document.createElement('div');
-        li.textContent = '→ контрабанда обнаружена!';
-        log.appendChild(li);
-        state.found.push('contra');
-        foundSomething = true;
+    // Специфика инструментов
+    if (tool.n === 'ReflexHammer') {
+        let reaction = 'normal';
+        if (p.status === 'healthy') reaction = 'normal';
+        else if (p.status === 'carrier') reaction = seededRandom() < 0.5 ? 'weak_same' : 'hyper_same';
+        else reaction = seededRandom() < 0.4 ? 'none' : (seededRandom() < 0.5 ? 'aggressive_same' : 'other_hand');
+        const color = reaction.includes('normal') ? 'green' : reaction.includes('same') ? 'yellow' : 'red';
+        const text = `Реакция на молоток: ${reaction.replace('_same',' (та же рука)').replace('other_hand',' (другая рука)')}`;
+        const div = document.createElement('div');
+        div.className = `symptom ${color}${color==='red'?' shake':''}`;
+        div.textContent = text;
+        log.appendChild(div);
+        foundNew = true;
+        playSound(color === 'red' ? 'growl' : 'beep');
     }
 
-    if (!foundSomething) {
-        log.innerHTML += '<div>→ ничего подозрительного</div>';
+    if (tool.n === 'SymptomScanner') {
+        const hints = Object.keys(SYMPTOMS).filter(()=>seededRandom()<0.8);
+        const div = document.createElement('div');
+        div.className = 'symptom yellow';
+        div.textContent = `Подсказка: проверьте ${hints.slice(0,3).join(', ')}`;
+        log.appendChild(div);
+        foundNew = true;
+    }
+
+    if (tool.c === 'internal') {
+        const items = [];
+        if (seededRandom() < 0.4) items.push('еда ✅');
+        if (seededRandom() < 0.25) items.push('оружие 🚫');
+        if (seededRandom() < 0.15) items.push('части зомби 🔴');
+        if (p.contra) items.push('контрабанда внутри тела 🔴');
+        if (items.length) {
+            const div = document.createElement('div');
+            div.className = 'symptom ' + (items.some(i=>i.includes('🔴')) ? 'red' : 'yellow');
+            div.textContent = 'В багаже / теле: ' + items.join(', ');
+            log.appendChild(div);
+            foundNew = true;
+        }
+    }
+
+    if (!foundNew) {
+        const div = document.createElement('div');
+        div.className = 'symptom green';
+        div.textContent = 'Ничего подозрительного';
+        log.appendChild(div);
     }
 
     log.scrollTop = log.scrollHeight;
@@ -395,96 +479,250 @@ function inspect(tool) {
 // ──────────────────────────────────────────────
 // Решение
 // ──────────────────────────────────────────────
-
 function decide(choice) {
+    if (tg) tg.HapticFeedback.impactOccurred('heavy');
     const p = state.person;
-    let score = 0;
-    let infDelta = 0;
+    let score = 40, infDelta = 0, budgetDelta = -60;
+    const isInfected = p.status === 'infected';
+    const isCarrier = p.status === 'carrier';
+    const contraFound = state.found.some(f => f.includes('контрабанда') || f.includes('оружие') || f.includes('части зомби'));
+    const allKnownFound = p.syms.filter(s => !s.hidden).every(s => state.found.includes(s.sym));
+    const unknownSent = choice === 'LAB' && p.syms.some(s => s.hidden);
 
-    const isInfected = p.status === 'infected' || (p.status === 'carrier' && Math.random() < 0.4);
-    const contraFound = state.found.includes('contra');
+    switch(choice) {
+        case 'SAFE':
+            if (p.status === 'healthy' && !contraFound) { score = 110; budgetDelta = 30; }
+            else { infDelta = isInfected ? 2.8 : 1.2; budgetDelta = -180; }
+            break;
+        case 'QUARANTINE':
+            if (isCarrier) { score = 140; budgetDelta = 20; }
+            else { infDelta = isInfected ? 1.1 : 0.6; budgetDelta = -90; }
+            break;
+        case 'LIQUIDATION':
+            if (isInfected) { score = 170; budgetDelta = 40; }
+            else { infDelta = p.status === 'healthy' ? 0.9 : 0.4; budgetDelta = -120; }
+            break;
+        case 'LAB':
+            score = 280; budgetDelta = 60;
+            if (unknownSent) {
+                p.syms.filter(s => s.hidden).forEach(s => {
+                    if (!state.researched.includes(s.sym)) state.researched.push(s.sym);
+                });
+                score += 150 * p.syms.filter(s => s.hidden).length;
+            }
+            if (p.status === 'healthy') infDelta = 1.4;
+            break;
+    }
 
-    if (choice === 'SAFE') {
-        if (p.status === 'healthy' && !p.contra) score = 100;
-        else infDelta = isInfected ? 2 : 1;
-    }
-    else if (choice === 'QUARANTINE') {
-        if (p.status === 'carrier') score = 120;
-        else if (p.status === 'healthy') infDelta = 0.5;
-    }
-    else if (choice === 'LIQUIDATION') {
-        if (p.status === 'infected') score = 150;
-        else infDelta = p.status === 'healthy' ? 0.7 : 0.3;
-    }
-    else if (choice === 'LAB') {
-        score = 250;
-        if (p.status === 'healthy') infDelta = 0.8;
-    }
+    if (contraFound) { score += 90; budgetDelta += 120; }
+    if (allKnownFound) score += 80;
 
-    // бонус за тщательность
-    const allFound = p.syms.every(s => state.found.includes(s.sym)) || (p.contra && contraFound);
-    if (allFound) score += 60;
-
-    if (score > 0) state.correct++;
-    state.total++;
     state.rp += score;
     state.inf += infDelta;
-    state.stats[choice === 'SAFE' ? 's' : choice === 'QUARANTINE' ? 'q' : choice === 'LIQUIDATION' ? 'l' : 'lab']++;
+    state.budget += budgetDelta;
+    state.total++;
+    if (score > 80) state.correct++;
+    state.stats[choice[0].toLowerCase()]++;
 
-    if (state.inf >= 7) {
-        document.getElementById('over-reason').innerHTML = 'Инфекция вышла из-под контроля.<br>Заражение достигло критического уровня.';
-        show('over');
-        return;
-    }
-
-    if (state.queue.length === 0) {
-        // конец дня — простая проверка
-        if (state.stats.s < 3 && state.day > 5) {
-            state.inf += 1.5;
-        }
-        state.day++;
-        if (state.day > state.bestDay) state.bestDay = state.day - 1;
-        state.stats = {s:0,q:0,l:0,lab:0};
-        startDay();
-    }
-
+    checkEndDay();
     show('main');
     save();
     renderAll();
 }
 
 // ──────────────────────────────────────────────
-// UI
+// Конец дня / проверки
 // ──────────────────────────────────────────────
+function checkEndDay() {
+    if (state.queue.length > 0) return;
 
-function show(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    if (id === 'profile') {
-        document.getElementById('bestday').textContent = state.bestDay || '—';
-        document.getElementById('acc').textContent = state.total ? Math.round(state.correct / state.total * 100) : '—';
-        document.getElementById('totalinsp').textContent = state.total;
+    const minSafe = Math.max(5, Math.floor(state.day / 4));
+    const minLiqLab = Math.max(3, Math.floor(state.day / 6));
+    if (state.stats.s < minSafe || state.stats.l + state.stats.lab < minLiqLab) state.failed++;
+
+    // ежедневные расходы
+    let dailyCost = 100 + state.day * 8 - (state.baseUpgrades.generator || 0) * 25;
+    state.budget -= dailyCost;
+
+    // бонусы от базы
+    if (state.baseUpgrades.canteen) state.budget += state.baseUpgrades.canteen * 40;
+    if (state.baseUpgrades.security) state.inf *= Math.pow(0.82, state.baseUpgrades.security);
+
+    state.day++;
+    if (state.day - 1 > state.bestDay) state.bestDay = state.day - 1;
+
+    if (state.failed >= 5 || state.budget < -800 || state.inf >= 7) {
+        document.getElementById('over-title').textContent = 'GAME OVER';
+        document.getElementById('over-reason').innerHTML =
+            state.inf >= 7 ? 'Инфекция вышла из-под контроля!' :
+            state.failed >= 5 ? 'Слишком много проваленных квот!' :
+            'База обанкротилась!';
+        show('over');
+    } else {
+        startDay();
     }
 }
 
-function renderAll() {
-    document.getElementById('rp').textContent = state.rp;
-    document.getElementById('inf').textContent = Math.floor(state.inf);
-    document.getElementById('daily').innerHTML = `
-        Safe: ${state.stats.s} 
-        Quar: ${state.stats.q} 
-        Liq: ${state.stats.l} 
-        Lab: ${state.stats.lab}
-    `;
-    document.getElementById('btn-lab').disabled = !state.tools.includes('XRay'); // пример условия
+// ──────────────────────────────────────────────
+// Прокачка инструментов
+// ──────────────────────────────────────────────
+function renderUpgrades() {
+    const list = document.getElementById('upgrade-list');
+    list.innerHTML = '';
+    TOOLS.forEach(tool => {
+        if (state.tools.includes(tool.n)) {
+            tool.upgrades?.forEach(up => {
+                if (!up.bought) {
+                    const div = document.createElement('div');
+                    div.className = 'upgrade-item';
+                    div.innerHTML = `
+                        <div>${tool.t} → ${up.name}</div>
+                        <div style="color:#ffeb3b;">${up.cost} RP</div>
+                        <button onclick="buyUpgrade('${tool.n}','${up.name}')" ${state.rp < up.cost ? 'disabled' : ''}>Купить</button>
+                    `;
+                    list.appendChild(div);
+                }
+            });
+        } else if (tool.cost) {
+            const div = document.createElement('div');
+            div.className = 'upgrade-item';
+            div.innerHTML = `
+                <img src="${tool.icon}" style="width:36px;height:36px;">
+                <div>${tool.t}</div>
+                <div style="color:#ffeb3b;">${tool.cost} RP</div>
+                <button onclick="buyTool('${tool.n}')" ${state.rp < tool.cost ? 'disabled' : ''}>Разблокировать</button>
+            `;
+            list.appendChild(div);
+        }
+    });
+}
+
+function buyTool(name) {
+    const tool = TOOLS.find(t => t.n === name);
+    if (state.rp >= tool.cost) {
+        state.rp -= tool.cost;
+        state.tools.push(name);
+        save();
+        renderUpgrades();
+        renderAll();
+        if (tg) tg.HapticFeedback.notificationOccurred('success');
+    }
+}
+
+function buyUpgrade(toolName, upName) {
+    const tool = TOOLS.find(t => t.n === toolName);
+    const up = tool.upgrades.find(u => u.name === upName);
+    if (state.rp >= up.cost) {
+        state.rp -= up.cost;
+        if (!state.toolUpgrades[toolName]) state.toolUpgrades[toolName] = {};
+        state.toolUpgrades[toolName][upName] = true;
+        up.bought = true;
+        save();
+        renderUpgrades();
+        renderAll();
+    }
+}
+
+// ──────────────────────────────────────────────
+// База
+// ──────────────────────────────────────────────
+function renderBase() {
+    document.getElementById('zone-level').textContent = state.zoneLevel;
+    const list = document.getElementById('base-list');
+    list.innerHTML = '';
+    BASE_UPGRADES.forEach(b => {
+        const lvl = state.baseUpgrades[b.key] || 0;
+        if (lvl < b.max) {
+            const cost = b.costs[lvl];
+            const div = document.createElement('div');
+            div.className = 'base-item';
+            div.innerHTML = `
+                <div>${b.name} (${lvl}/${b.max})</div>
+                <div style="color:#81c784;">${b.desc}</div>
+                <button onclick="buyBase('${b.key}')" ${state.rp < cost ? 'disabled' : ''}>${cost} RP</button>
+            `;
+            list.appendChild(div);
+        }
+    });
+
+    const zoneCost = [0,180,500,1100,2000][state.zoneLevel+1] || 9999;
+    document.getElementById('zone-upgrade-btn').textContent = `Повысить уровень зоны (${zoneCost} RP)`;
+    document.getElementById('zone-upgrade-btn').disabled = state.rp < zoneCost;
+}
+
+function buyBase(key) {
+    const b = BASE_UPGRADES.find(bu => bu.key === key);
+    const lvl = state.baseUpgrades[key] || 0;
+    const cost = b.costs[lvl];
+    if (state.rp >= cost) {
+        state.rp -= cost;
+        state.baseUpgrades[key] = lvl + 1;
+        save();
+        renderBase();
+        renderAll();
+    }
+}
+
+function upgradeZone() {
+    const costs = [0,180,500,1100,2000];
+    const next = state.zoneLevel + 1;
+    if (next >= costs.length) return;
+    if (state.rp >= costs[next]) {
+        state.rp -= costs[next];
+        state.zoneLevel = next;
+        // unlock new tools or upgrades here if needed
+        save();
+        renderBase();
+        renderAll();
+    }
+}
+
+// ──────────────────────────────────────────────
+// Профиль
+// ──────────────────────────────────────────────
+function renderProfile() {
+    document.getElementById('bestday').textContent = state.bestDay || '—';
+    document.getElementById('acc').textContent = state.total ? Math.round(state.correct / state.total * 100) : '—';
+    document.getElementById('total').textContent = state.total;
+    document.getElementById('correct').textContent = state.correct;
+    document.getElementById('failed').textContent = state.failed;
+    document.getElementById('researched').textContent = state.researched.length;
+}
+
+// ──────────────────────────────────────────────
+// Звуки
+// ──────────────────────────────────────────────
+function playSound(type) {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        osc.type = 'sawtooth';
+        osc.frequency.value = type === 'growl' ? 90 : (type === 'beep' ? 520 : 300);
+        const gain = ctx.createGain();
+        gain.gain.value = 0.15;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        setTimeout(() => osc.stop(), type === 'growl' ? 400 : 180);
+    } catch(e) {}
+}
+
+// ──────────────────────────────────────────────
+// Бесконечный режим
+// ──────────────────────────────────────────────
+function startEndless() {
+    state.endless = true;
+    state.day = 27;
+    state.inf = Math.max(0, state.inf - 2);
+    resetGame();
 }
 
 // ──────────────────────────────────────────────
 // Старт
 // ──────────────────────────────────────────────
-
 load();
 startDay();
+renderAll();
 </script>
 </body>
 </html>
