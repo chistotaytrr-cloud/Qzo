@@ -9,15 +9,10 @@
     :root {
       --bg: #0d1117;
       --text: #e6edf3;
-      --card: rgba(22,27,34,0.82);
-      --border: rgba(240,246,252,0.16);
+      --card: rgba(22,27,34,0.85);
+      --border: rgba(240,246,252,0.12);
       --blur: blur(12px);
-      --green: rgba(46,125,50,0.85);
-      --yellow: rgba(245,184,0,0.85);
-      --red: rgba(200,50,50,0.85);
-      --purple: rgba(110,84,148,0.85);
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: system-ui, sans-serif;
@@ -26,164 +21,34 @@
       height: 100vh;
       overflow: hidden;
     }
-
     #app { height: 100%; display: flex; flex-direction: column; }
-
-    .screen {
-      display: none;
-      flex-direction: column;
-      height: 100%;
-      padding: 16px;
-      overflow-y: auto;
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
-      backdrop-filter: var(--blur);
-    }
-
+    .screen { display: none; flex-direction: column; height: 100%; padding: 16px; overflow-y: auto; background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)); backdrop-filter: var(--blur); }
     .active { display: flex; }
-
-    .header {
-      font-size: 1.4rem;
-      font-weight: bold;
-      text-align: center;
-      padding: 12px;
-      background: rgba(22,27,34,0.9);
-      border-radius: 16px;
-      margin-bottom: 16px;
-      border: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 16px;
-      margin: 12px 0;
-      border: 1px solid var(--border);
-      backdrop-filter: var(--blur);
-    }
-
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin: 20px 0;
-    }
-
-    .tool-card {
-      text-align: center;
-      padding: 16px;
-      border-radius: 16px;
-      background: linear-gradient(145deg, #1e2530, #0f141e);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
+    .header { font-size: 1.4rem; font-weight: bold; padding: 12px; background: rgba(22,27,34,0.95); border-radius: 16px; margin-bottom: 16px; border: 1px solid var(--border); display: flex; justify-content: space-between; }
+    .card { background: var(--card); border-radius: 16px; padding: 16px; margin: 12px 0; border: 1px solid var(--border); backdrop-filter: var(--blur); }
+    .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin: 20px 0; }
+    .tool-card { text-align: center; padding: 16px; border-radius: 16px; background: linear-gradient(145deg, #1e2530, #0f141e); border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
     .tool-card:active { transform: scale(0.97); }
-
     .tool-card img { width: 60px; height: 60px; margin-bottom: 8px; }
-
-    .btn {
-      padding: 14px 28px;
-      border: none;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
+    .btn { padding: 14px 28px; border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
     .btn:active { transform: scale(0.97); }
-
     .btn-green  { background: #238636; color: white; }
     .btn-yellow { background: #d69f00; color: #0d1117; }
     .btn-red    { background: #c94a4a; color: white; }
     .btn-purple { background: #6e5494; color: white; }
-
-    .portrait {
-      width: 100%;
-      max-width: 280px;
-      border-radius: 20px;
-      margin: 0 auto 20px;
-      display: block;
-      border: 3px solid rgba(255,255,255,0.1);
-    }
-
-    .decision-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 24px 0;
-    }
-
-    .log {
-      background: rgba(13,17,23,0.9);
-      border-radius: 16px;
-      padding: 16px;
-      margin: 16px 0;
-      flex: 1;
-      overflow-y: auto;
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-
-    .symptom {
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 12px;
-      font-weight: 600;
-      text-align: center;
-    }
-
-    .green  { background: var(--green);  color: white; }
-    .yellow { background: var(--yellow); color: #0d1117; }
-    .red    { background: var(--red);    color: white; }
-    .purple { background: var(--purple); color: white; }
-
-    .menu {
-      position: absolute;
-      top: 60px;
-      right: 16px;
-      background: rgba(22,27,34,0.98);
-      border-radius: 16px;
-      padding: 16px;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 100;
-      border: 1px solid var(--border);
-      display: none;
-      min-width: 240px;
-    }
-
+    .portrait { width: 100%; max-width: 280px; border-radius: 20px; margin: 0 auto 20px; display: block; border: 3px solid rgba(255,255,255,0.1); }
+    .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 24px 0; }
+    .log { background: rgba(13,17,23,0.92); border-radius: 16px; padding: 16px; margin: 16px 0; flex: 1; overflow-y: auto; font-size: 1rem; line-height: 1.5; }
+    .symptom { padding: 12px; margin: 8px 0; border-radius: 12px; font-weight: 600; text-align: center; }
+    .green  { background: rgba(46,125,50,0.9); color: white; }
+    .yellow { background: rgba(245,184,0,0.9); color: #0d1117; }
+    .red    { background: rgba(200,50,50,0.9); color: white; }
+    .purple { background: rgba(110,84,148,0.9); color: white; }
+    .menu { position: absolute; top: 60px; right: 16px; background: rgba(22,27,34,0.98); border-radius: 16px; padding: 16px; flex-direction: column; gap: 12px; z-index: 100; border: 1px solid var(--border); display: none; min-width: 240px; }
     .menu.active { display: flex; }
-
-    .menu button {
-      padding: 14px;
-      background: rgba(40,45,55,0.9);
-      border: none;
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 1.05rem;
-      text-align: left;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .progress-bar {
-      height: 12px;
-      background: #2d3748;
-      border-radius: 6px;
-      overflow: hidden;
-      margin: 16px 0;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #238636, #d32f2f);
-      transition: width 0.5s;
-    }
+    .menu button { padding: 14px; background: rgba(40,45,55,0.9); border: none; border-radius: 12px; color: var(--text); font-size: 1.05rem; text-align: left; display: flex; align-items: center; gap: 12px; }
+    .progress-bar { height: 12px; background: #2d3748; border-radius: 6px; overflow: hidden; margin: 16px 0; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #238636, #d32f2f); transition: width 0.5s; }
   </style>
 </head>
 <body>
@@ -193,26 +58,14 @@
   <div id="main" class="screen active">
     <div class="header">
       <span>День <b id="day">1</b></span>
-      <span>RP <b id="rp">0</b></span>
+      <span>RP <b id="rp">50</b></span>
       <span>Заражение <b id="inf">0.0</b>/10</span>
     </div>
-
     <div class="card" id="stats" style="text-align:center;"></div>
-
-    <div style="margin:16px 0;">
-      <div class="progress-bar"><div class="progress-fill" id="inf-bar" style="width:0%"></div></div>
-    </div>
-
+    <div style="margin:16px 0;"><div class="progress-bar"><div class="progress-fill" id="inf-bar" style="width:0%"></div></div></div>
     <div id="queue" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:20px 0;"></div>
-
-    <button id="next" class="btn btn-green" style="margin:30px auto; width:96%; font-size:1.2rem; padding:18px;">
-      Следующий выживший
-    </button>
-
-    <button id="menu-btn" style="position:absolute;top:16px;right:16px;background:rgba(40,45,55,0.8);color:white;border:none;padding:14px;border-radius:50%;font-size:1.3rem;">
-      <i class="fas fa-bars"></i>
-    </button>
-
+    <button id="next" class="btn btn-green" style="margin:30px auto; width:96%; font-size:1.2rem; padding:18px;">Следующий выживший</button>
+    <button id="menu-btn" style="position:absolute;top:16px;right:16px;background:rgba(40,45,55,0.8);color:white;border:none;padding:14px;border-radius:50%;font-size:1.3rem;"><i class="fas fa-bars"></i></button>
     <div id="menu" class="menu">
       <button onclick="show('profile')"><i class="fas fa-user"></i> Профиль</button>
       <button onclick="show('upgrades')"><i class="fas fa-tools"></i> Инструменты</button>
@@ -222,52 +75,40 @@
 
   <div id="inspect" class="screen">
     <div class="header">Осмотр №<span id="pid"></span></div>
-
     <img id="portrait" class="portrait" src="" alt="">
-
     <div id="desc" class="card" style="text-align:center; font-size:1.1rem;"></div>
-
     <div class="tool-grid" id="tools"></div>
-
     <div class="log" id="log"></div>
-
     <div class="decision-grid">
       <button class="btn btn-green"     onclick="decide('SAFE')">В ЛАГЕРЬ</button>
       <button class="btn btn-yellow" onclick="decide('QUARANTINE')">КАРАНТИН</button>
       <button class="btn btn-red"    onclick="decide('LIQUIDATION')">ЛИКВИДАЦИЯ</button>
       <button class="btn btn-purple" id="btn-lab" disabled onclick="decide('LAB')">ЛАБ</button>
     </div>
-
-    <button onclick="back()" class="btn" style="margin:24px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">
-      ← Назад (пропустить)
-    </button>
+    <button onclick="back()" class="btn" style="margin:24px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">← Назад (пропустить)</button>
   </div>
 
   <div id="upgrades" class="screen">
     <div class="header">Улучшение инструментов</div>
     <div class="tool-grid" id="upgrade-list"></div>
-    <button onclick="show('main')" class="btn" style="margin:30px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">
-      Назад
-    </button>
+    <button onclick="show('main')" class="btn" style="margin:30px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">Назад</button>
   </div>
 
   <div id="profile" class="screen">
     <div class="header">Профиль</div>
     <div class="card" style="text-align:center; line-height:1.8;">
-      <p>Лучший день: <b id="bestday">—</b></p>
+      <p>Лучший день: <b id="bestday">1</b></p>
       <p>Точность: <b id="accuracy">—</b>%</p>
       <p>Осмотрено: <b id="total">0</b></p>
       <p>Ошибок: <b id="errors">0</b></p>
     </div>
-    <button onclick="show('main')" class="btn" style="margin:30px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">
-      Назад
-    </button>
+    <button onclick="show('main')" class="btn" style="margin:30px auto; background:rgba(40,45,55,0.8); color:white; width:96%;">Назад</button>
   </div>
 
 </div>
 
 <script>
-// ────────────────────────────────────────────────
+// Telegram
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
@@ -277,10 +118,11 @@ let state = {
   inf: 0,
   tools: ['Flashlight'],
   queue: [],
-  quarantined: [],          // {id, symptoms: [], daySent}
+  quarantined: [], // {id, infected: bool, symptoms: [], daysInQ: 0}
   person: null,
-  isInfected: false,
-  symptomsFound: [],
+  infected: false,
+  symptoms: [],
+  knownSymptoms: new Set(),
   stats: { safe:0, quar:0, liq:0, lab:0 },
   total: 0,
   correct: 0,
@@ -288,93 +130,125 @@ let state = {
 };
 
 const TOOLS = [
-  {n:'Flashlight',       t:'Фонарик (UV)',     icon:'https://img.icons8.com/ios-filled/100/ffffff/flashlight.png',       cost:0,    reveals:['bite','rash']},
-  {n:'Thermometer',      t:'Термометр',        icon:'https://img.icons8.com/ios-filled/100/ffffff/thermometer.png',      cost:300,  reveals:['fever']},
-  {n:'Stethoscope',      t:'Стетоскоп',        icon:'https://img.icons8.com/ios-filled/100/ffffff/stethoscope.png',      cost:600,  reveals:['cough','breathing']},
-  {n:'ReflexHammer',     t:'Молоточек',        icon:'https://img.icons8.com/ios-filled/100/ffffff/hammer.png',          cost:900,  reveals:['reflex']},
-  {n:'BloodAnalyzer',    t:'Анализ крови',     icon:'https://img.icons8.com/ios-filled/100/ffffff/syringe.png',          cost:1800, reveals:['virus'], lab:true},
-  {n:'XRay',             t:'Рентген',          icon:'https://img.icons8.com/ios-filled/100/ffffff/x-ray.png',            cost:2500, reveals:['lungs']}
+  {n:'Flashlight',   t:'Фонарик (UV)',     icon:'https://img.icons8.com/ios-filled/100/ffffff/flashlight.png',       cost:0,    reveals:['bite','rash','uv_glow'],     color:'red'},
+  {n:'Thermometer',  t:'Термопульсометр',  icon:'https://img.icons8.com/ios-filled/100/ffffff/thermometer.png',      cost:400,  reveals:['high_temp','high_pulse'],    color:'yellow'},
+  {n:'Stethoscope',  t:'Стетоскоп',        icon:'https://img.icons8.com/ios-filled/100/ffffff/stethoscope.png',      cost:800,  reveals:['cough','wheeze','growl'],     color:'yellow'},
+  {n:'Hammer',       t:'Молоточек',        icon:'https://img.icons8.com/ios-filled/100/ffffff/hammer.png',          cost:1200, reveals:['cross_reflex','aggressive'], color:'red'},
+  {n:'Scanner',      t:'Сканер',           icon:'https://img.icons8.com/ios-filled/100/ffffff/scanner.png',         cost:2000, reveals:['necrosis','bruise'],         color:'yellow'},
+  {n:'XRay',         t:'Рентген',          icon:'https://img.icons8.com/ios-filled/100/ffffff/x-ray.png',            cost:3000, reveals:['lung_spots','internal_bleed'],color:'red'},
+  {n:'Analyzer',     t:'Анализ крови (LAB)',icon:'https://img.icons8.com/ios-filled/100/ffffff/syringe.png',       cost:4500, reveals:['confirmed_virus'],         color:'red', lab:true}
 ];
 
-const SYMPTOMS = {
-  bite:      {desc:'Старый укус на шее/руке',     color:'red',    infected:true},
-  rash:      {desc:'Странная сыпь под UV',        color:'red',    infected:true},
-  fever:     {desc:'Температура 38.8–39.4°C',     color:'yellow', infected:Math.random()<0.7},
-  cough:     {desc:'Сильный сухой кашель',        color:'yellow', infected:Math.random()<0.6},
-  breathing: {desc:'Хриплое / затруднённое дыхание', color:'yellow', infected:Math.random()<0.65},
-  reflex:    {desc:'Замедленная реакция зрачков', color:'red',    infected:true},
-  virus:     {desc:'Вирус в крови — 100%',        color:'red',    infected:true},
-  lungs:     {desc:'Затемнения в лёгких',         color:'red',    infected:true}
+const SYMPTOMS_POOL = {
+  bite:             {desc:'Укус на шее/руке',         type:'red',    infected:true},
+  rash:             {desc:'Странная сыпь',            type:'red',    infected:true},
+  uv_glow:          {desc:'Свечение под UV',          type:'red',    infected:true},
+  high_temp:        {desc:'Температура 39°C+',        type:'yellow', infected:Math.random()<0.75},
+  high_pulse:       {desc:'Пульс >160',               type:'yellow', infected:Math.random()<0.7},
+  cough:            {desc:'Сухой кашель',             type:'yellow', infected:Math.random()<0.6},
+  wheeze:           {desc:'Хрипы в лёгких',           type:'yellow', infected:Math.random()<0.65},
+  growl:            {desc:'Рычание / странные звуки', type:'red',    infected:true},
+  cross_reflex:     {desc:'Перекрёстный рефлекс',     type:'red',    infected:true},
+  aggressive:       {desc:'Агрессивная реакция',      type:'yellow', infected:Math.random()<0.8},
+  necrosis:         {desc:'Некроз тканей',            type:'red',    infected:true},
+  bruise:           {desc:'Синяки / гематомы',        type:'yellow', infected:false},
+  lung_spots:       {desc:'Пятна в лёгких',           type:'red',    infected:true},
+  internal_bleed:   {desc:'Внутреннее кровотечение',  type:'red',    infected:true},
+  confirmed_virus:  {desc:'Вирус подтверждён',        type:'red',    infected:true}
 };
 
 // ────────────────────────────────────────────────
-function load(){ const s=localStorage.getItem('qz_lastcheck'); if(s) Object.assign(state,JSON.parse(s)); renderAll(); }
-function save(){ localStorage.setItem('qz_lastcheck',JSON.stringify(state)); }
-function resetGame(){ localStorage.removeItem('qz_lastcheck'); location.reload(); }
-
-// ────────────────────────────────────────────────
-function startDay(){
-  const count = 6 + Math.floor(Math.random()*10) + state.day*2;
-  state.queue = Array.from({length:count},(_,i)=>({id:i+1}));
-  processQuarantine();
+function load() {
+  const s = localStorage.getItem('qz_lastcheck');
+  if (s) Object.assign(state, JSON.parse(s));
   renderAll();
 }
 
-function processQuarantine(){
-  state.quarantined = state.quarantined.filter(q=>{
-    q.days++;
-    if(q.days >= 1 + Math.floor(Math.random()*3)){
-      const wasInfected = q.isInfected;
-      q.isInfected = Math.random() < 0.4 + (q.days*0.1); // может ухудшиться
-      if(!wasInfected && q.isInfected) addLogGlobal(`Кто-то в карантине превратился...`);
-      if(!q.isInfected) addLogGlobal(`Человек #${q.id} из карантина выздоровел`);
-      return false; // убираем из карантина
-    }
-    return true;
-  });
+function save() {
+  localStorage.setItem('qz_lastcheck', JSON.stringify(state));
 }
 
-function renderQueue(){
+function resetGame() {
+  localStorage.removeItem('qz_lastcheck');
+  location.reload();
+}
+
+// ────────────────────────────────────────────────
+function startDay() {
+  const count = 5 + Math.floor(Math.random() * 8) + state.day * 2;
+  state.queue = Array.from({length: count}, (_, i) => ({id: i+1}));
+  checkQuarantineChanges();
+  renderAll();
+}
+
+function checkQuarantineChanges() {
+  state.quarantined.forEach(q => {
+    q.daysInQ++;
+    if (q.daysInQ >= 1) {
+      const roll = Math.random();
+      if (roll < 0.35) { // выздоровел
+        q.infected = false;
+        addGlobalMessage(`#${q.id} из карантина выздоровел!`);
+      } else if (roll < 0.7) { // ухудшился
+        q.infected = true;
+        addGlobalMessage(`#${q.id} в карантине ухудшился...`);
+      }
+      // иначе остаётся как есть
+    }
+  });
+  // Убираем тех, кто >3 дней или здоров/мёртв (упрощённо)
+  state.quarantined = state.quarantined.filter(q => q.daysInQ < 4 && (q.infected || Math.random() > 0.3));
+}
+
+function addGlobalMessage(msg) {
+  const q = document.getElementById('queue');
+  const div = document.createElement('div');
+  div.style = 'color:#ff4444; font-weight:bold; margin:8px;';
+  div.textContent = msg;
+  q.appendChild(div);
+}
+
+function renderQueue() {
   const el = document.getElementById('queue');
   el.innerHTML = '';
-  state.queue.slice(0,5).forEach(p=>{
+  state.queue.slice(0,5).forEach(p => {
     const d = document.createElement('div');
     d.style = 'width:60px;height:60px;background:#1f2937;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:1.3rem;border:2px solid #4a5568;';
     d.textContent = p.id;
     el.appendChild(d);
   });
-  if(state.quarantined.length) {
+  if (state.quarantined.length) {
     const qc = document.createElement('div');
     qc.textContent = `Карантин: ${state.quarantined.length}`;
-    qc.style = 'color:#d69f00;font-weight:bold;';
+    qc.style = 'color:#d69f00;font-weight:bold;margin:8px;';
     el.appendChild(qc);
   }
 }
 
-function renderAll(){
+function renderAll() {
   document.getElementById('day').textContent = state.day;
   document.getElementById('rp').textContent = state.rp;
   document.getElementById('inf').textContent = state.inf.toFixed(1);
-  document.getElementById('inf-bar').style.width = Math.min(state.inf/10*100,100)+'%';
+  document.getElementById('inf-bar').style.width = Math.min(state.inf / 10 * 100, 100) + '%';
   document.getElementById('stats').innerHTML = `Лагерь: ${state.stats.safe} | Кар: ${state.stats.quar} | Ликв: ${state.stats.liq} | Лаб: ${state.stats.lab}`;
-  document.getElementById('btn-lab').disabled = !state.tools.some(t=>TOOLS.find(o=>o.n===t)?.lab);
+  document.getElementById('btn-lab').disabled = !state.tools.includes('Analyzer');
   renderQueue();
 
   document.getElementById('bestday').textContent = state.bestDay;
   document.getElementById('total').textContent = state.total;
-  document.getElementById('accuracy').textContent = state.total ? Math.round(state.correct/state.total*100) : '—';
+  document.getElementById('accuracy').textContent = state.total ? Math.round(state.correct / state.total * 100) : '—';
   document.getElementById('errors').textContent = state.total - state.correct;
 }
 
 // ────────────────────────────────────────────────
-document.getElementById('menu-btn').onclick = ()=> document.getElementById('menu').classList.toggle('active');
+document.getElementById('menu-btn').onclick = () => document.getElementById('menu').classList.toggle('active');
 
-document.getElementById('next').onclick = ()=>{
-  if(!state.queue.length){
+document.getElementById('next').onclick = () => {
+  if (!state.queue.length) {
     state.day++;
-    state.rp += 30 + state.day*10;
-    if(state.inf >= 10){
-      alert("ИНФЕКЦИЯ ПРОРВАЛАСЬ!\nИгра окончена.\nЛучший день: "+state.bestDay);
+    state.rp += 40 + state.day * 15;
+    if (state.inf >= 10) {
+      alert("ИНФЕКЦИЯ ПРОРВАЛАСЬ!\nИгра окончена.\nЛучший день: " + state.bestDay);
       resetGame();
       return;
     }
@@ -383,115 +257,117 @@ document.getElementById('next').onclick = ()=>{
   }
 
   state.person = state.queue.shift();
-  state.isInfected = Math.random() < 0.25 + state.day*0.03;
-  state.symptomsFound = [];
-  const portrait = document.getElementById('portrait');
-  portrait.src = `https://images.unsplash.com/photo-15${Math.floor(Math.random()*50)+10}0${Math.floor(Math.random()*999)}?w=400`;
+  state.infected = Math.random() < (0.22 + state.day * 0.025);
+  state.symptoms = [];
+  state.knownSymptoms.clear(); // для этого осмотра
 
   document.getElementById('pid').textContent = state.person.id;
-  document.getElementById('desc').textContent = 'Человек выглядит уставшим. Начинайте осмотр.';
-  document.getElementById('log').innerHTML = '<div class="symptom green">Осмотр начат. Выберите инструмент.</div>';
+  document.getElementById('portrait').src = `https://images.unsplash.com/photo-15${Math.floor(Math.random()*50)+10}0${Math.floor(Math.random()*999)}?w=400`;
+  document.getElementById('desc').textContent = 'Выживший выглядит уставшим. Начинайте осмотр инструментами.';
+  document.getElementById('log').innerHTML = '<div class="symptom green">Осмотр начат. Используйте инструменты.</div>';
 
   renderTools();
   show('inspect');
   renderAll();
 };
 
-function renderTools(){
+function renderTools() {
   const c = document.getElementById('tools');
   c.innerHTML = '';
-  TOOLS.forEach(t=>{
-    if(state.tools.includes(t.n)){
+  TOOLS.forEach(t => {
+    if (state.tools.includes(t.n)) {
       const div = document.createElement('div');
       div.className = 'tool-card';
       div.innerHTML = `<img src="${t.icon}" alt=""><div>${t.t}</div>`;
-      div.onclick = ()=> useTool(t);
+      div.onclick = () => useTool(t);
       c.appendChild(div);
     }
   });
 }
 
-function useTool(tool){
-  let found = false;
-  tool.reveals.forEach(sym=>{
-    if(!state.symptomsFound.includes(sym) && Math.random()<0.75){
-      state.symptomsFound.push(sym);
-      const s = SYMPTOMS[sym];
-      const color = s.infected ? 'red' : (s.color==='yellow'?'yellow':'green');
-      document.getElementById('log').innerHTML += `<div class="symptom ${color}">${s.desc}</div>`;
-      found = true;
+function useTool(tool) {
+  let added = false;
+  tool.reveals.forEach(key => {
+    if (!state.knownSymptoms.has(key) && Math.random() < 0.8) {
+      const sym = SYMPTOMS_POOL[key];
+      if (sym) {
+        state.symptoms.push(key);
+        state.knownSymptoms.add(key);
+        const color = sym.type;
+        document.getElementById('log').innerHTML += `<div class="symptom ${color}">${sym.desc}</div>`;
+        added = true;
+      }
     }
   });
-  if(!found){
-    document.getElementById('log').innerHTML += `<div class="symptom green">Ничего нового не обнаружено</div>`;
+  if (!added) {
+    document.getElementById('log').innerHTML += `<div class="symptom green">Ничего подозрительного не найдено</div>`;
   }
   document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
 }
 
-function decide(choice){
-  const infected = state.isInfected;
+function decide(choice) {
+  const isInfected = state.infected;
   let correct = false;
 
-  if(choice==='SAFE'       && !infected) correct=true;
-  if(choice==='QUARANTINE' &&  infected) correct=true; // лучше карантин, чем пропустить
-  if(choice==='LIQUIDATION'&&  infected) correct=true;
-  if(choice==='LAB'        &&  infected) correct=true;
+  if (choice === 'SAFE' && !isInfected) correct = true;
+  if (choice === 'QUARANTINE' && (state.symptoms.some(s => SYMPTOMS_POOL[s]?.type === 'yellow') || !isInfected && Math.random() < 0.4)) correct = true;
+  if (choice === 'LIQUIDATION' && isInfected) correct = true;
+  if (choice === 'LAB' && state.tools.includes('Analyzer')) correct = (isInfected === true);
 
   const color = correct ? 'green' : 'red';
-  document.getElementById('log').innerHTML += `<div class="symptom ${color}">Решение: ${choice} ${correct?' — верно':' — ОШИБКА!'}</div>`;
+  document.getElementById('log').innerHTML += `<div class="symptom ${color}">Решение: ${choice} ${correct ? '✓ Верно' : '✗ Ошибка!'}</div>`;
 
   state.total++;
-  if(correct){
+  if (correct) {
     state.correct++;
-    state.rp += choice==='SAFE'?20 : choice==='LAB'?100 : 50;
+    state.rp += choice === 'SAFE' ? 25 : choice === 'LAB' ? 150 : choice === 'LIQUIDATION' ? 80 : 50;
   } else {
-    state.inf += choice==='SAFE'?1.2 : choice==='QUARANTINE'?0.4 : 0.1;
+    state.inf += choice === 'SAFE' ? 1.5 : choice === 'QUARANTINE' ? 0.5 : 0.2;
   }
 
-  state.stats[choice.toLowerCase().slice(0,3)]++;
+  state.stats[choice.toLowerCase().slice(0,3)] ++;
 
-  if(choice==='QUARANTINE'){
+  if (choice === 'QUARANTINE') {
     state.quarantined.push({
       id: state.person.id,
-      isInfected: infected,
-      symptoms: [...state.symptomsFound],
-      days: 0
+      infected: isInfected,
+      symptoms: [...state.symptoms],
+      daysInQ: 0
     });
   }
 
-  if(state.bestDay < state.day) state.bestDay = state.day;
+  if (state.bestDay < state.day) state.bestDay = state.day;
   save();
   back();
 }
 
-function back(){
+function back() {
   document.getElementById('menu').classList.remove('active');
   show('main');
-  renderAll();
 }
 
-// ────────────────────────────────────────────────
-function renderUpgrades(){
+// Upgrades
+function renderUpgrades() {
   const c = document.getElementById('upgrade-list');
   c.innerHTML = '';
-  TOOLS.forEach(t=>{
-    if(!state.tools.includes(t.n) && t.cost){
+  TOOLS.forEach(t => {
+    if (!state.tools.includes(t.n) && t.cost) {
       const div = document.createElement('div');
       div.className = 'tool-card';
       div.innerHTML = `
         <img src="${t.icon}">
         <div>${t.t}</div>
         <div style="color:#ffd700;font-weight:bold;">${t.cost} RP</div>
-        <button class="btn btn-green" ${state.rp < t.cost?'disabled':''} onclick="buy('${t.n}')">Купить</button>
+        <button class="btn btn-green" ${state.rp < t.cost ? 'disabled' : ''} onclick="buyTool('${t.n}')">Купить</button>
       `;
       c.appendChild(div);
     }
   });
 }
 
-function buy(name){
-  const t = TOOLS.find(o=>o.n===name);
-  if(!t || state.rp < t.cost) return;
+function buyTool(name) {
+  const t = TOOLS.find(o => o.n === name);
+  if (!t || state.rp < t.cost) return;
   state.rp -= t.cost;
   state.tools.push(name);
   save();
@@ -499,14 +375,14 @@ function buy(name){
   renderAll();
 }
 
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.getElementById('menu').classList.remove('active');
-  if(id==='upgrades') renderUpgrades();
+  if (id === 'upgrades') renderUpgrades();
 }
 
-// ────────────────────────────────────────────────
+// Init
 load();
 startDay();
 </script>
