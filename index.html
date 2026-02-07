@@ -118,7 +118,13 @@
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
 
-    .btn:active { transform: scale(0.96); }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn:active:not(:disabled) { transform: scale(0.96); }
 
     .btn-green  { background: linear-gradient(145deg, #238636, #2ea44f); color: white; }
     .btn-yellow { background: linear-gradient(145deg, #daaa3f, #f1c232); color: #0d1117; }
@@ -167,6 +173,7 @@
     .green  { background: rgba(46,125,50,0.85); color: white; }
     .yellow { background: rgba(245,184,0,0.85); color: #0d1117; }
     .red    { background: rgba(200,50,50,0.85); color: white; }
+    .purple { background: rgba(110,84,148,0.85); color: white; }
 
     .menu {
       position: absolute;
@@ -181,7 +188,10 @@
       border: 1px solid var(--border);
       box-shadow: 0 20px 80px rgba(0,0,0,0.85);
       min-width: 260px;
+      display: none;
     }
+
+    .menu.active { display: flex; }
 
     .menu button {
       width: 100%;
@@ -237,7 +247,7 @@
       Осмотреть следующего
     </button>
 
-    <button onclick="document.getElementById('menu').classList.toggle('active')" style="position:absolute;top:20px;right:20px;background:rgba(40,45,55,0.85);color:white;border:none;padding:16px;border-radius:50%;font-size:1.4rem;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+    <button id="menu-btn" style="position:absolute;top:20px;right:20px;background:rgba(40,45,55,0.85);color:white;border:none;padding:16px;border-radius:50%;font-size:1.4rem;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
       <i class="fas fa-bars"></i>
     </button>
 
@@ -264,11 +274,11 @@
       <button class="btn btn-green"     onclick="decide('SAFE')">SAFE</button>
       <button class="btn btn-yellow" onclick="decide('QUARANTINE')">КАРАНТИН</button>
       <button class="btn btn-red"    onclick="decide('LIQUIDATION')">ЛИКВИДАЦИЯ</button>
-      <button class="btn btn-purple" id="btn-lab" onclick="decide('LAB')">LAB</button>
+      <button class="btn btn-purple" id="btn-lab" disabled onclick="decide('LAB')">LAB</button>
     </div>
 
-    <button onclick="show('main')" style="margin:32px auto; background:rgba(40,45,55,0.85); color:white; border:none; padding:16px 48px; border-radius:20px; font-size:1.15rem; width:94%; max-width:420px;">
-      ← Назад
+    <button onclick="backToMain()" style="margin:32px auto; background:rgba(40,45,55,0.85); color:white; border:none; padding:16px 48px; border-radius:20px; font-size:1.15rem; width:94%; max-width:420px;">
+      ← Назад (пропустить)
     </button>
   </div>
 
@@ -297,14 +307,14 @@
 </div>
 
 <script>
-// Telegram
+// Telegram Web App
 const tg = window.Telegram?.WebApp;
 if (tg) {
   tg.ready();
   tg.expand();
 }
 
-// State (можно расширять дальше)
+// ────────────────────────────────────────────────
 let state = {
   day: 1,
   rp: 0,
@@ -312,25 +322,24 @@ let state = {
   tools: ['Flashlight'],
   queue: [],
   person: null,
-  found: [],
+  currentPersonInfected: false,
+  inspectedTools: new Set(),
   stats: { s:0, q:0, l:0, lab:0 },
   total: 0,
   correct: 0,
   bestDay: 0
 };
 
-// Tools
 const TOOLS = [
-  { n: 'Flashlight',        t: 'Фонарик',          icon: 'https://img.icons8.com/ios-filled/100/ffffff/flashlight.png',        cost: 0   },
-  { n: 'Thermopulsometer',  t: 'Термопульс',       icon: 'https://img.icons8.com/ios-filled/100/ffffff/thermometer.png',      cost: 400 },
-  { n: 'ReflexHammer',      t: 'Рефлексы',         icon: 'https://img.icons8.com/ios-filled/100/ffffff/hammer.png',           cost: 600 },
-  { n: 'Stethoscope',       t: 'Стетоскоп',        icon: 'https://img.icons8.com/ios-filled/100/ffffff/stethoscope.png',      cost: 800 },
-  { n: 'UVScanner',         t: 'UV-сканер',        icon: 'https://img.icons8.com/ios-filled/100/ffffff/uv-light.png',         cost: 1200},
-  { n: 'XRay',              t: 'Рентген',          icon: 'https://img.icons8.com/ios-filled/100/ffffff/x-ray.png',            cost: 1800},
-  { n: 'SyringeAnalyzer',   t: 'Анализ крови',     icon: 'https://img.icons8.com/ios-filled/100/ffffff/syringe.png',          cost: 2800}
+  { n: 'Flashlight',       t: 'Фонарик',       icon: 'https://img.icons8.com/ios-filled/100/ffffff/flashlight.png',       cost: 0    },
+  { n: 'Thermopulsometer', t: 'Термопульс',    icon: 'https://img.icons8.com/ios-filled/100/ffffff/thermometer.png',     cost: 400  },
+  { n: 'ReflexHammer',     t: 'Рефлексы',      icon: 'https://img.icons8.com/ios-filled/100/ffffff/hammer.png',          cost: 600  },
+  { n: 'Stethoscope',      t: 'Стетоскоп',     icon: 'https://img.icons8.com/ios-filled/100/ffffff/stethoscope.png',     cost: 800  },
+  { n: 'UVScanner',        t: 'UV-сканер',     icon: 'https://img.icons8.com/ios-filled/100/ffffff/uv-light.png',        cost: 1200 },
+  { n: 'XRay',             t: 'Рентген',       icon: 'https://img.icons8.com/ios-filled/100/ffffff/x-ray.png',           cost: 1800 },
+  { n: 'SyringeAnalyzer',  t: 'Анализ крови',  icon: 'https://img.icons8.com/ios-filled/100/ffffff/syringe.png',         cost: 2800 }
 ];
 
-// Portraits (можно добавить больше)
 const PORTRAITS = [
   'https://images.unsplash.com/photo-1603733265789-4d049460a6f3?w=400',
   'https://images.unsplash.com/photo-1540979388789-7cee28a1cdc9?w=400',
@@ -338,7 +347,7 @@ const PORTRAITS = [
   'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?w=400'
 ];
 
-// Load / Save
+// ────────────────────────────────────────────────
 function load() {
   const s = localStorage.getItem('lastcontrol_pro');
   if (s) Object.assign(state, JSON.parse(s));
@@ -350,15 +359,19 @@ function save() {
 }
 
 function resetGame() {
-  state = { day:1, rp:0, inf:0, tools:['Flashlight'], queue:[], person:null, found:[], stats:{s:0,q:0,l:0,lab:0}, total:0, correct:0, bestDay:0 };
+  state = {
+    day:1, rp:0, inf:0, tools:['Flashlight'], queue:[], person:null,
+    currentPersonInfected: false, inspectedTools: new Set(),
+    stats:{s:0,q:0,l:0,lab:0}, total:0, correct:0, bestDay:0
+  };
   save();
   startDay();
   show('main');
 }
 
-// Day
+// ────────────────────────────────────────────────
 function startDay() {
-  const cnt = 8 + Math.floor(Math.random() * 12);
+  const cnt = 8 + Math.floor(Math.random() * 13); // 8–20 человек
   state.queue = Array.from({length: cnt}, (_, i) => ({ id: i+1 }));
   renderQueue();
   renderAll();
@@ -376,24 +389,51 @@ function renderQueue() {
 }
 
 function renderAll() {
-  document.getElementById('day').textContent = state.day;
-  document.getElementById('rp').textContent = state.rp;
-  document.getElementById('inf').textContent = state.inf.toFixed(1);
-  document.getElementById('daily-stats').innerHTML = `SAFE: ${state.stats.s}  КАР: ${state.stats.q}  ЛИК: ${state.stats.l}  LAB: ${state.stats.lab}`;
+  document.getElementById('day').textContent     = state.day;
+  document.getElementById('rp').textContent      = state.rp;
+  document.getElementById('inf').textContent     = state.inf.toFixed(1);
   document.getElementById('inf-bar').style.width = Math.min(state.inf / 7 * 100, 100) + '%';
+  document.getElementById('daily-stats').innerHTML =
+    `SAFE: ${state.stats.s} КАР: ${state.stats.q} ЛИК: ${state.stats.l} LAB: ${state.stats.lab}`;
+
+  document.getElementById('btn-lab').disabled = !state.tools.includes('SyringeAnalyzer');
+
+  document.getElementById('bestday').textContent = state.bestDay || '—';
+  document.getElementById('total').textContent   = state.total;
+  document.getElementById('acc').textContent     = state.total ? Math.round(state.correct / state.total * 100) : '—';
 }
 
-// Inspection
+// ────────────────────────────────────────────────
+document.getElementById('menu-btn').onclick = () => {
+  document.getElementById('menu').classList.toggle('active');
+};
+
 document.getElementById('next-person').onclick = () => {
-  if (!state.queue.length) return;
+  if (!state.queue.length) {
+    // День окончен
+    state.day++;
+    state.rp += Math.floor(Math.random() * 80 + 40); // бонус за день
+    if (state.inf >= 7) {
+      alert("Заражение достигло критического уровня!\nИгра окончена.\nЛучший день: " + state.bestDay);
+      resetGame();
+      return;
+    }
+    startDay();
+    return;
+  }
+
   state.person = state.queue.shift();
-  state.found = [];
+  state.currentPersonInfected = Math.random() < 0.28 + (state.day * 0.015); // шанс растёт с днями
+  state.inspectedTools.clear();
+
   document.getElementById('pid').textContent = state.person.id;
-  document.getElementById('desc').textContent = 'Человек выглядит подозрительно...';
   document.getElementById('portrait').src = PORTRAITS[Math.floor(Math.random() * PORTRAITS.length)];
-  document.getElementById('log').innerHTML = '<div class="symptom green">Начните осмотр инструментами</div>';
+  document.getElementById('desc').textContent = 'Внешне выглядит нормально, но что-то настораживает...';
+  document.getElementById('log').innerHTML = '<div class="symptom green">Выберите инструмент для осмотра</div>';
+
   renderTools();
   show('inspect');
+  renderAll();
 };
 
 function renderTools() {
@@ -407,27 +447,85 @@ function renderTools() {
         <img src="${tool.icon}" alt="${tool.t}">
         <div class="name">${tool.t}</div>
       `;
-      card.onclick = () => {
-        const log = document.getElementById('log');
-        log.innerHTML += `<div class="symptom yellow">Осмотр ${tool.t.toLowerCase()}...</div>`;
-        log.scrollTop = log.scrollHeight;
-      };
+      card.onclick = () => useTool(tool);
       container.appendChild(card);
     }
   });
 }
 
+function useTool(tool) {
+  if (state.inspectedTools.has(tool.n)) return; // уже использовали
+  state.inspectedTools.add(tool.n);
+
+  const log = document.getElementById('log');
+  let msg = '';
+  let color = 'yellow';
+
+  switch (tool.n) {
+    case 'Flashlight':
+      msg = state.currentPersonInfected ? 'На коже видны слабые пятна...' : 'Кожа чистая.';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+    case 'Thermopulsometer':
+      msg = state.currentPersonInfected ? 'Температура 38.7°C' : 'Температура 36.6°C';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+    case 'ReflexHammer':
+      msg = 'Реакция нормальная / слегка замедленная.';
+      break;
+    case 'Stethoscope':
+      msg = state.currentPersonInfected ? 'Дыхание хриплое, сердцебиение учащённое' : 'Дыхание ровное';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+    case 'UVScanner':
+      msg = state.currentPersonInfected ? 'Под кожей видны странные свечения' : 'Ничего подозрительного';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+    case 'XRay':
+      msg = state.currentPersonInfected ? 'Затемнения в лёгких' : 'Лёгкие чистые';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+    case 'SyringeAnalyzer':
+      msg = state.currentPersonInfected ? 'Вирус подтверждён' : 'Анализ отрицательный';
+      color = state.currentPersonInfected ? 'red' : 'green';
+      break;
+  }
+
+  log.innerHTML += `<div class="symptom ${color}">${msg}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
 function decide(choice) {
   const log = document.getElementById('log');
-  log.innerHTML += `<div class="symptom ${choice === 'SAFE' ? 'green' : choice === 'QUARANTINE' ? 'yellow' : choice === 'LIQUIDATION' ? 'red' : 'purple'}">
-    Решение: ${choice}
+  const isCorrect = (choice === 'SAFE' && !state.currentPersonInfected) ||
+                    (choice !== 'SAFE' && state.currentPersonInfected);
+
+  log.innerHTML += `<div class="symptom ${isCorrect ? 'green' : 'red'}">
+    Решение: ${choice} ${isCorrect ? '✓ Правильно' : '✗ Ошибка'}
   </div>`;
   log.scrollTop = log.scrollHeight;
 
+  state.total++;
+  if (isCorrect) {
+    state.correct++;
+    state.rp += choice === 'SAFE' ? 25 : choice === 'LAB' ? 120 : 60;
+  } else {
+    state.inf += choice === 'SAFE' ? 0.9 : choice === 'QUARANTINE' ? 0.3 : 0.05;
+  }
+
   state.stats[choice[0].toLowerCase()]++;
-  show('main');
+  state.inspectedTools.clear();
+
+  if (state.bestDay < state.day) state.bestDay = state.day;
+
   save();
   renderAll();
+  backToMain();
+}
+
+function backToMain() {
+  document.getElementById('menu').classList.remove('active');
+  show('main');
 }
 
 // Upgrades
@@ -453,20 +551,22 @@ function renderUpgrades() {
 
 function buyTool(name) {
   const tool = TOOLS.find(t => t.n === name);
-  if (state.rp >= tool.cost) {
-    state.rp -= tool.cost;
-    state.tools.push(name);
-    save();
-    renderUpgrades();
-    renderAll();
-  }
+  if (!tool || state.rp < tool.cost) return;
+  state.rp -= tool.cost;
+  state.tools.push(name);
+  save();
+  renderUpgrades();
+  renderAll();
 }
 
 // Navigation
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  document.getElementById('menu').classList.remove('active');
+
   if (id === 'upgrades') renderUpgrades();
+  if (id === 'profile') renderAll(); // обновляем цифры
 }
 
 // Init
